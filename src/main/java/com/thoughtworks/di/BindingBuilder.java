@@ -16,8 +16,8 @@ public class BindingBuilder<T> {
     }
 
 
-    public Binding build() {
-        return new Binding(name, type, constructorArgTypes, constructorArgValues);
+    public Binding<T> build() {
+        return new Binding<T>(name, type, constructorArgTypes, constructorArgValues);
     }
 
     public BindingBuilder<T> constructorArg(Class<?> type, Object value) {
