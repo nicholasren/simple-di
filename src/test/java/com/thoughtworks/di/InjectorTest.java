@@ -14,7 +14,7 @@ public class InjectorTest {
     public void should_create_bean_through_constructor_injecting() {
         Injector injector = Injector.create(new Configuration() {
             protected void configure() {
-                create("user").bind(com.example.User.class);
+                bind(com.example.User.class).to("user");
             }
         });
         assertThat(injector.get("user"), notNullValue());
@@ -24,8 +24,8 @@ public class InjectorTest {
     public void should_create_multi_bean_through_constructor_injecting() {
         Injector injector = Injector.create(new Configuration() {
             protected void configure() {
-                create("user").bind(com.example.User.class);
-                create("phone").bind(com.example.Phone.class);
+                bind(com.example.User.class).to("user");
+                bind(com.example.Phone.class).to("phone");
             }
         });
 
@@ -37,7 +37,7 @@ public class InjectorTest {
     public void should_create_bean_with_given_constructor_arg() {
         Injector injector = Injector.create(new Configuration() {
             protected void configure() {
-                create("user").bind(User.class).constructorArg(String.class, "John");
+                bind(User.class).to("user").constructorArg(String.class, "John");
             }
         });
 

@@ -7,8 +7,10 @@ public abstract class Configuration {
 
     public List<BindingBuilder> builders = new LinkedList<BindingBuilder>();
 
-    public BindingBuilder create(String name) {
-        BindingBuilder builder = new BindingBuilder(name);
+
+
+    public <T> BindingBuilder bind(Class<T> clazz) {
+        BindingBuilder builder = new BindingBuilder(clazz);
         builders.add(builder);
         return builder;
     }
