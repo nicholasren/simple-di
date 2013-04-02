@@ -4,6 +4,7 @@ import com.example.Phone;
 import com.example.Service;
 import com.example.ServiceImpl;
 import com.example.User;
+import com.thoughtworks.di.exception.BeanCreationException;
 import org.junit.Test;
 
 import static junit.framework.Assert.assertTrue;
@@ -21,6 +22,16 @@ public class InjectorTest {
             }
         });
         assertThat(injector.get("user", User.class), notNullValue());
+    }
+
+    @Test(expected = BeanCreationException.class)
+    public void should_throw_error_when_creating_a_instance_of_interface() {
+        Injector injector = Injector.create(new Configuration() {
+            protected void configure() {
+                bind(Service.class);
+            }
+        });
+        injector.get(Service.class);
     }
 
     @Test
@@ -69,7 +80,7 @@ public class InjectorTest {
             }
         });
 
-        assertThat(((User) injector.get("user", User.class)).getName(), is("John"));
+        assertThat(injector.get("user", User.class).getName(), is("John"));
     }
 
 
@@ -93,6 +104,6 @@ public class InjectorTest {
             }
         });
 
-        assertThat(((User) injector.get("user", User.class)).getPhone().getType(), is("Samsung"));
+        assertThat(injector.get("user", User.class).getPhone().getType(), is("Samsung"));
     }
 }

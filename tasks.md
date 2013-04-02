@@ -27,7 +27,7 @@
 2. create named bean through setter inject DONE
 3. create named bean that depends on another bean DONE
 4. inject bean depends on type
-    4.1 create and get bean by type
+    4.1 create and get bean by type DONE
 5. do not need to type cast when get bean
 6. create named bean support collection inject
 7. circle dependency
