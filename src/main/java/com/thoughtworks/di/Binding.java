@@ -6,6 +6,7 @@ public class Binding<T> {
     private TargetBuilder targetBuilder;
     private PropertyInjector propertyInjector;
     private DependencyInjector dependencyInjector;
+    private AnnotatedFieldInjector annotatedFieldInjector;
 
 
     public Binding(Class<T> type) {
@@ -13,6 +14,7 @@ public class Binding<T> {
         this.targetBuilder = new DefaultTargetBuilder(type);
         this.propertyInjector = new PropertyInjector(type);
         this.dependencyInjector = new DependencyInjector(type);
+        this.annotatedFieldInjector = new AnnotatedFieldInjector(type);
     }
 
     public T getTarget() {
@@ -22,6 +24,8 @@ public class Binding<T> {
         this.propertyInjector.inject(target);
 
         this.dependencyInjector.inject(target);
+
+        this.annotatedFieldInjector.inject(target);
 
         return target;
     }
@@ -46,6 +50,7 @@ public class Binding<T> {
 
     public void setInjector(Injector injector) {
         this.dependencyInjector.setInjector(injector);
+        this.annotatedFieldInjector.setInjector(injector);
     }
 
     public void setName(String name) {

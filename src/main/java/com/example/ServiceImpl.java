@@ -6,4 +6,9 @@ public class ServiceImpl implements Service {
     public void setVersion(String version) {
         this.version = version;
     }
+
+    @Override
+    public String getVersion() {
+        return version;
+    }
 }

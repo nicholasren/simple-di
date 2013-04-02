@@ -4,7 +4,9 @@ package com.thoughtworks.di;
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
+import com.thoughtworks.di.exception.BeanCreationException;
 
+import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.Collection;
 
@@ -26,7 +28,7 @@ public class Injector {
     }
 
 
-    public <T> T get(final String name, Class<T> clazz) {
+    public <T> T get(final String name, Class<T> type) {
         Collection<Binding> foundBindings = Collections2.filter(bindings, new Predicate<Binding>() {
             @Override
             public boolean apply(@javax.annotation.Nullable Binding binding) {
@@ -38,11 +40,12 @@ public class Injector {
     }
 
 
-    public <T> T get(final Class<T> clazz) {
+    public <T> T get(final Class<T> type) {
+
         Collection<Binding> foundBindings = Collections2.filter(bindings, new Predicate<Binding>() {
             @Override
             public boolean apply(Binding binding) {
-                return typeOf(binding.getType(), clazz);
+                return typeOf(binding.getType(), type);
             }
 
             private boolean typeOf(Class<T> actual, Class<T> clazz) {
@@ -67,8 +70,8 @@ public class Injector {
         }
     }
 
-    private <T> T firstOf(Collection<Binding> foundBindings) {
-        return foundBindings.isEmpty() ? null : (T) foundBindings.toArray(new Binding[0])[0].getTarget();
+    private <T> T firstOf(Collection<Binding> bindings) {
+        return bindings.isEmpty() ? null : (T) bindings.toArray(new Binding[0])[0].getTarget();
     }
 
 

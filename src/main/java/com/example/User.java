@@ -1,8 +1,13 @@
 package com.example;
 
+import javax.inject.Inject;
+
 public class User {
     private String name;
     private Phone phone;
+
+    @Inject
+    private Service service;
 
     public User() {
     }
@@ -21,5 +26,14 @@ public class User {
 
     public void setPhone(Phone phone) {
         this.phone = phone;
+    }
+
+    public Service getService() {
+        return service;
+    }
+
+
+    public void setService(Service service) {
+        this.service = service;
     }
 }

@@ -25,18 +25,17 @@ uploadArchives {
 
 project.ext {
     guavaVersion = '14.0.1'
-    slf4jVersion = '1.7.3'
     junitVersion = '4.10'
     hamcrestVersion = '1.3'
-    mockitoVersion = '1.9.5'
     jsr305Version = '1.3.7'
+    injectVersion = '1'
 }
 
 dependencies {
     compile(
             "com.google.guava:guava:$guavaVersion",
-            "org.slf4j:slf4j-api:$slf4jVersion",
             "net.sourceforge.findbugs:jsr305:$jsr305Version",
+            "javax.inject:javax.inject:$injectVersion"
     )
 
     runtime(
@@ -47,7 +46,6 @@ dependencies {
             "junit:junit-dep:$junitVersion",
             "org.hamcrest:hamcrest-core:$hamcrestVersion",
             "org.hamcrest:hamcrest-library:$hamcrestVersion",
-            "org.mockito:mockito-core:$mockitoVersion",
     )
 }
 

@@ -96,7 +96,7 @@ public class InjectorTest {
     }
 
     @Test
-    public void should_resolve_bean_dependency() {
+    public void should_resolve_bean_dependency_by_reference() {
         Injector injector = Injector.create(new Configuration() {
             protected void configure() {
                 bind(Phone.class).to("phone1").property("type", "Samsung");
@@ -105,5 +105,17 @@ public class InjectorTest {
         });
 
         assertThat(injector.get("user", User.class).getPhone().getType(), is("Samsung"));
+    }
+
+    @Test
+    public void should_resolve_bean_dependency_by_type() {
+        Injector injector = Injector.create(new Configuration() {
+            protected void configure() {
+                bind(ServiceImpl.class).property("version", "1.0");
+                bind(User.class);
+            }
+        });
+
+        assertThat(injector.get(User.class).getService().getVersion(), is("1.0"));
     }
 }
