@@ -1,6 +1,8 @@
 package com.thoughtworks.di;
 
 import com.example.Phone;
+import com.example.Service;
+import com.example.ServiceImpl;
 import com.example.User;
 import org.junit.Test;
 
@@ -18,7 +20,7 @@ public class InjectorTest {
                 bind(com.example.User.class).to("user");
             }
         });
-        assertThat(injector.get("user"), notNullValue());
+        assertThat(injector.get("user", User.class), notNullValue());
     }
 
     @Test
@@ -30,8 +32,32 @@ public class InjectorTest {
             }
         });
 
-        assertTrue(injector.get("user") instanceof com.example.User);
-        assertTrue(injector.get("phone") instanceof com.example.Phone);
+        assertTrue(injector.get("user", User.class) instanceof com.example.User);
+        assertTrue(injector.get("phone", Phone.class) instanceof com.example.Phone);
+    }
+
+    @Test
+    public void should_return_bean_though_interface() {
+        Injector injector = Injector.create(new Configuration() {
+            @Override
+            void configure() {
+                bind(ServiceImpl.class).property("version", "1.0");
+            }
+        });
+
+        assertTrue(injector.get(Service.class) instanceof ServiceImpl);
+    }
+
+    @Test
+    public void should_return_bean_though_type() {
+        Injector injector = Injector.create(new Configuration() {
+            @Override
+            void configure() {
+                bind(ServiceImpl.class).property("version", "1.0");
+            }
+        });
+
+        assertTrue(injector.get(ServiceImpl.class) instanceof ServiceImpl);
     }
 
     @Test
@@ -43,7 +69,7 @@ public class InjectorTest {
             }
         });
 
-        assertThat(((User) injector.get("user")).getName(), is("John"));
+        assertThat(((User) injector.get("user", User.class)).getName(), is("John"));
     }
 
 
@@ -55,7 +81,7 @@ public class InjectorTest {
             }
         });
 
-        assertThat(((User) injector.get("user")).getName(), is("John"));
+        assertThat((injector.get("user", User.class)).getName(), is("John"));
     }
 
     @Test
@@ -67,6 +93,6 @@ public class InjectorTest {
             }
         });
 
-        assertThat(((User) injector.get("user")).getPhone().getType(), is("Samsung"));
+        assertThat(((User) injector.get("user", User.class)).getPhone().getType(), is("Samsung"));
     }
 }

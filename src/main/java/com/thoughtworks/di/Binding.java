@@ -55,4 +55,8 @@ public class Binding<T> {
     public String getName() {
         return name;
     }
+
+    public Class<T> getType() {
+        return type;
+    }
 }

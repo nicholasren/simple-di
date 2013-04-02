@@ -5,6 +5,7 @@ import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 
+import java.util.Arrays;
 import java.util.Collection;
 
 
@@ -25,15 +26,30 @@ public class Injector {
     }
 
 
-    public Object get(final String name) {
-        Binding binding = (Binding) Collections2.filter(bindings, new Predicate<Binding>() {
+    public <T> T get(final String name, Class<T> clazz) {
+        Collection<Binding> foundBindings = Collections2.filter(bindings, new Predicate<Binding>() {
             @Override
             public boolean apply(@javax.annotation.Nullable Binding binding) {
                 return binding.getName().equals(name);
             }
-        }).toArray()[0];
+        });
 
-        return binding == null ? null : binding.getTarget();
+        return firstOf(foundBindings);
+    }
+
+
+    public <T> T get(final Class<T> clazz) {
+        Collection<Binding> foundBindings = Collections2.filter(bindings, new Predicate<Binding>() {
+            @Override
+            public boolean apply(Binding binding) {
+                return typeOf(binding.getType(), clazz);
+            }
+
+            private boolean typeOf(Class<T> actual, Class<T> clazz) {
+                return Arrays.asList(actual.getInterfaces()).contains(clazz) || actual.equals(clazz);
+            }
+        });
+        return firstOf(foundBindings);
     }
 
     private static Collection<Binding> buildBindings(Configuration configuration) {
@@ -50,4 +66,10 @@ public class Injector {
             binding.setInjector(this);
         }
     }
+
+    private <T> T firstOf(Collection<Binding> foundBindings) {
+        return foundBindings.isEmpty() ? null : (T) foundBindings.toArray(new Binding[0])[0].getTarget();
+    }
+
+
 }

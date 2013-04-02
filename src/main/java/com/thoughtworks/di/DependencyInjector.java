@@ -24,7 +24,7 @@ class DependencyInjector<T> {
         if (!dependencies.isEmpty()) {
             try {
                 for (Map.Entry<String, String> entry : dependencies.entrySet()) {
-                    Object value = injector.get(entry.getValue());
+                    Object value = injector.get(entry.getValue(), target.getClass());
                     Field field = type.getDeclaredField(entry.getKey());
                     field.setAccessible(true);
                     field.set(target, value);
