@@ -4,13 +4,11 @@ public class BindingBuilder<T> {
     private Binding<T> binding;
 
     public BindingBuilder(Class<T> type) {
-        this.binding = new Binding<T>();
-        this.binding.setType(type);
+        this.binding = new Binding<T>(type);
     }
 
     public BindingBuilder<T> constructorArg(Class<?> type, Object value) {
-        this.binding.addConstructorArgTypes(type);
-        this.binding.addConstructorArgValues(value);
+        binding.addConstructorArg(new ConstructorArg(type, value));
         return this;
     }
 
@@ -19,12 +17,17 @@ public class BindingBuilder<T> {
         return this;
     }
 
-    public BindingBuilder property(String name, Object value) {
+    public BindingBuilder<T> property(String name, Object value) {
         this.binding.addProperties(name, value);
         return this;
     }
 
     public Binding<T> build() {
         return this.binding;
+    }
+
+    public BindingBuilder<T> depends(String propertyName, String beanName) {
+        this.binding.depends(propertyName, beanName);
+        return this;
     }
 }

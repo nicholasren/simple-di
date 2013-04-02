@@ -14,6 +14,9 @@ public class Injector {
 
     public Injector(Collection<Binding> bindings) {
         this.bindings = bindings;
+        for (Binding binding : this.bindings) {
+            binding.setInjector(this);
+        }
     }
 
     public static Injector create(Configuration configuration) {

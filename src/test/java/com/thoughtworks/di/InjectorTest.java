@@ -1,5 +1,6 @@
 package com.thoughtworks.di;
 
+import com.example.Phone;
 import com.example.User;
 import org.junit.Test;
 
@@ -29,7 +30,7 @@ public class InjectorTest {
             }
         });
 
-        assertThat(((User)injector.get("user")).getName(), is("John"));
+        assertThat(((User) injector.get("user")).getName(), is("John"));
     }
 
     @Test
@@ -54,5 +55,17 @@ public class InjectorTest {
         });
 
         assertThat(((User) injector.get("user")).getName(), is("John"));
+    }
+
+    @Test
+    public void should_resolve_bean_dependency() {
+        Injector injector = Injector.create(new Configuration() {
+            protected void configure() {
+                bind(Phone.class).to("phone1").property("type", "Samsung");
+                bind(User.class).to("user").depends("phone", "phone1");
+            }
+        });
+
+        assertThat(((User) injector.get("user")).getPhone().getType(), is("Samsung"));
     }
 }

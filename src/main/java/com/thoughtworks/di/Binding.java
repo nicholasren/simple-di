@@ -2,22 +2,23 @@ package com.thoughtworks.di;
 
 import com.thoughtworks.di.exception.BeanCreationException;
 
-import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class Binding<T> {
     private String name;
     private Class<T> type;
-    private List<Class<?>> constructorArgTypes = new ArrayList<Class<?>>();
-    private List<Object> constructorArgValues = new ArrayList<Object>();
     private Map<String, Object> properties = new HashMap<String, Object>();
+    private TargetBuilder withConstructorArgTargetBuilder;
+    private TargetBuilder defaultTargetBuilder;
+    private Map<String, String> propertyReferences = new HashMap<String, String>();
+    private Injector injector;
 
-    public Binding() {
 
+    public Binding(Class<T> type) {
+        this.type = type;
+        this.defaultTargetBuilder = new DefaultTargetBuilder(type);
     }
 
     public String getName() {
@@ -25,45 +26,55 @@ public class Binding<T> {
     }
 
     public T getTarget() {
-        return buildTarget();
+
+        T target = (T) getTargetBuilder().build();
+
+        injectProperties(target);
+
+        injectDependencies(target);
+
+        return target;
     }
 
     public void setName(String name) {
         this.name = name;
     }
 
-    public void setType(Class<T> type) {
-        this.type = type;
+    public void addProperties(String name, Object value) {
+        this.properties.put(name, value);
     }
 
-    public void addConstructorArgTypes(Class<?> constructorArgTypes) {
-        this.constructorArgTypes.add(constructorArgTypes);
-    }
-
-    public void addConstructorArgValues(Object constructorArgValues) {
-        this.constructorArgValues.add(constructorArgValues);
-    }
-
-
-    private T buildTarget() {
-        T target;
-        try {
-            if (this.constructorArgTypes.isEmpty()) {
-                target = this.type.newInstance();
-            } else {
-                Class<?>[] argTypes = {};
-                Object[] argValues = {};
-                Constructor constructor = this.type.getConstructor(this.constructorArgTypes.toArray(argTypes));
-                target = (T) constructor.newInstance(this.constructorArgValues.toArray(argValues));
-            }
-        } catch (Exception e) {
-            System.out.println("exception raised");
-            throw new BeanCreationException(e);
+    public void addConstructorArg(ConstructorArg arg) {
+        if (withConstructorArgTargetBuilder == null) {
+            this.withConstructorArgTargetBuilder = new WithConstructorArgTargetBuilder<T>(type);
         }
-
-        injectProperties(target);
-        return target;
+        ((WithConstructorArgTargetBuilder) this.withConstructorArgTargetBuilder).addConstructorArg(arg);
     }
+
+
+    public void depends(String propertyName, String beanName) {
+        this.propertyReferences.put(propertyName, beanName);
+    }
+
+    public void setInjector(Injector injector) {
+        this.injector = injector;
+    }
+
+    private void injectDependencies(T target) {
+        if (!propertyReferences.isEmpty()) {
+            try {
+                for (Map.Entry<String, String> entry : propertyReferences.entrySet()) {
+                    Object value = injector.get(entry.getValue());
+                    Field field = type.getDeclaredField(entry.getKey());
+                    field.setAccessible(true);
+                    field.set(target, value);
+                }
+            } catch (Exception e) {
+                throw new BeanCreationException(e);
+            }
+        }
+    }
+
 
     private void injectProperties(T target) {
         if (!properties.isEmpty()) {
@@ -75,12 +86,13 @@ public class Binding<T> {
                     field.set(target, entry.getValue());
                 }
             } catch (Exception e) {
-                e.printStackTrace();
+                throw new BeanCreationException(e);
             }
         }
     }
 
-    public void addProperties(String name, Object value) {
-        this.properties.put(name, value);
+
+    private TargetBuilder getTargetBuilder() {
+        return null != withConstructorArgTargetBuilder ? withConstructorArgTargetBuilder : defaultTargetBuilder;
     }
 }
