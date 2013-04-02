@@ -10,15 +10,14 @@ public class Binding<T> {
     private String name;
     private Class<T> type;
     private Map<String, Object> properties = new HashMap<String, Object>();
-    private TargetBuilder withConstructorArgTargetBuilder;
-    private TargetBuilder defaultTargetBuilder;
-    private Map<String, String> propertyReferences = new HashMap<String, String>();
+    private TargetBuilder targetBuilder;
+    private Map<String, String> dependencies = new HashMap<String, String>();
     private Injector injector;
 
 
     public Binding(Class<T> type) {
         this.type = type;
-        this.defaultTargetBuilder = new DefaultTargetBuilder(type);
+        this.targetBuilder = new DefaultTargetBuilder(type);
     }
 
     public String getName() {
@@ -27,7 +26,7 @@ public class Binding<T> {
 
     public T getTarget() {
 
-        T target = (T) getTargetBuilder().build();
+        T target = (T) targetBuilder.build();
 
         injectProperties(target);
 
@@ -45,15 +44,11 @@ public class Binding<T> {
     }
 
     public void addConstructorArg(ConstructorArg arg) {
-        if (withConstructorArgTargetBuilder == null) {
-            this.withConstructorArgTargetBuilder = new WithConstructorArgTargetBuilder<T>(type);
-        }
-        ((WithConstructorArgTargetBuilder) this.withConstructorArgTargetBuilder).addConstructorArg(arg);
+        ((WithConstructorArgTargetBuilder) this.targetBuilder).addConstructorArg(arg);
     }
 
-
     public void depends(String propertyName, String beanName) {
-        this.propertyReferences.put(propertyName, beanName);
+        this.dependencies.put(propertyName, beanName);
     }
 
     public void setInjector(Injector injector) {
@@ -61,9 +56,9 @@ public class Binding<T> {
     }
 
     private void injectDependencies(T target) {
-        if (!propertyReferences.isEmpty()) {
+        if (!dependencies.isEmpty()) {
             try {
-                for (Map.Entry<String, String> entry : propertyReferences.entrySet()) {
+                for (Map.Entry<String, String> entry : dependencies.entrySet()) {
                     Object value = injector.get(entry.getValue());
                     Field field = type.getDeclaredField(entry.getKey());
                     field.setAccessible(true);
@@ -74,7 +69,6 @@ public class Binding<T> {
             }
         }
     }
-
 
     private void injectProperties(T target) {
         if (!properties.isEmpty()) {
@@ -91,8 +85,7 @@ public class Binding<T> {
         }
     }
 
-
-    private TargetBuilder getTargetBuilder() {
-        return null != withConstructorArgTargetBuilder ? withConstructorArgTargetBuilder : defaultTargetBuilder;
+    public void withConstructorArg() {
+        this.targetBuilder = new WithConstructorArgTargetBuilder<T>(type);
     }
 }

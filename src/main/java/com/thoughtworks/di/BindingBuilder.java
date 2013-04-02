@@ -7,6 +7,11 @@ public class BindingBuilder<T> {
         this.binding = new Binding<T>(type);
     }
 
+    public BindingBuilder<T> withConstructorArg() {
+        this.binding.withConstructorArg();
+        return this;
+    }
+
     public BindingBuilder<T> constructorArg(Class<?> type, Object value) {
         binding.addConstructorArg(new ConstructorArg(type, value));
         return this;

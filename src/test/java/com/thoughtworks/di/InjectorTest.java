@@ -12,7 +12,7 @@ import static org.junit.Assert.assertThat;
 public class InjectorTest {
 
     @Test
-    public void should_create_bean_through_constructor_injecting() {
+    public void should_create_bean_through_default_constructor() {
         Injector injector = Injector.create(new Configuration() {
             protected void configure() {
                 bind(com.example.User.class).to("user");
@@ -22,19 +22,7 @@ public class InjectorTest {
     }
 
     @Test
-    public void should_create_bean_with_give_property() {
-        Injector injector = Injector.create(new Configuration() {
-            @Override
-            void configure() {
-                bind(User.class).to("user").property("name", "John");
-            }
-        });
-
-        assertThat(((User) injector.get("user")).getName(), is("John"));
-    }
-
-    @Test
-    public void should_create_multi_bean_through_constructor_injecting() {
+    public void should_create_multi_bean_through_default_constructor() {
         Injector injector = Injector.create(new Configuration() {
             protected void configure() {
                 bind(com.example.User.class).to("user");
@@ -47,10 +35,23 @@ public class InjectorTest {
     }
 
     @Test
-    public void should_create_bean_with_given_constructor_arg() {
+    public void should_create_bean_though_setter_injecting() {
+        Injector injector = Injector.create(new Configuration() {
+            @Override
+            void configure() {
+                bind(User.class).to("user").property("name", "John");
+            }
+        });
+
+        assertThat(((User) injector.get("user")).getName(), is("John"));
+    }
+
+
+    @Test
+    public void should_create_bean_though_constructor_arg_injecting() {
         Injector injector = Injector.create(new Configuration() {
             protected void configure() {
-                bind(User.class).to("user").constructorArg(String.class, "John");
+                bind(User.class).to("user").withConstructorArg().constructorArg(String.class, "John");
             }
         });
 
