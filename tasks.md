@@ -23,8 +23,7 @@
 
 
 ####tasks:
-1. create named bean through constructor inject only support primitive data type
+1. create named bean through constructor inject only support primitive data type DONE
 2. create named bean through setter inject
-3. create named bean with scope
-4. create named bean that depends on another bean
-5. create named bean support collection inject
+3. create named bean that depends on another bean
+4. create named bean support collection inject

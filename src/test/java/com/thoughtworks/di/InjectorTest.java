@@ -21,6 +21,18 @@ public class InjectorTest {
     }
 
     @Test
+    public void should_create_bean_with_give_property() {
+        Injector injector = Injector.create(new Configuration() {
+            @Override
+            void configure() {
+                bind(User.class).to("user").property("name", "John");
+            }
+        });
+
+        assertThat(((User)injector.get("user")).getName(), is("John"));
+    }
+
+    @Test
     public void should_create_multi_bean_through_constructor_injecting() {
         Injector injector = Injector.create(new Configuration() {
             protected void configure() {
