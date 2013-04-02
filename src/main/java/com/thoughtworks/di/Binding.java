@@ -9,8 +9,8 @@ import java.util.Map;
 public class Binding<T> {
     private String name;
     private Class<T> type;
-    private Map<String, Object> properties = new HashMap<String, Object>();
     private TargetBuilder targetBuilder;
+    private PropertyInjector propertyInjector;
     private Map<String, String> dependencies = new HashMap<String, String>();
     private Injector injector;
 
@@ -18,6 +18,7 @@ public class Binding<T> {
     public Binding(Class<T> type) {
         this.type = type;
         this.targetBuilder = new DefaultTargetBuilder(type);
+        this.propertyInjector = new PropertyInjector(type);
     }
 
     public String getName() {
@@ -28,7 +29,7 @@ public class Binding<T> {
 
         T target = (T) targetBuilder.build();
 
-        injectProperties(target);
+        propertyInjector.inject(target);
 
         injectDependencies(target);
 
@@ -39,13 +40,10 @@ public class Binding<T> {
         this.name = name;
     }
 
-    public void addProperties(String name, Object value) {
-        this.properties.put(name, value);
-    }
-
     public void addConstructorArg(ConstructorArg arg) {
         ((WithConstructorArgTargetBuilder) this.targetBuilder).addConstructorArg(arg);
     }
+
 
     public void depends(String propertyName, String beanName) {
         this.dependencies.put(propertyName, beanName);
@@ -70,22 +68,11 @@ public class Binding<T> {
         }
     }
 
-    private void injectProperties(T target) {
-        if (!properties.isEmpty()) {
-            try {
-                for (Map.Entry<String, Object> entry : properties.entrySet()) {
-
-                    Field field = type.getDeclaredField(entry.getKey());
-                    field.setAccessible(true);
-                    field.set(target, entry.getValue());
-                }
-            } catch (Exception e) {
-                throw new BeanCreationException(e);
-            }
-        }
-    }
-
     public void withConstructorArg() {
         this.targetBuilder = new WithConstructorArgTargetBuilder<T>(type);
+    }
+
+    public void addProperties(String name, Object value) {
+
     }
 }
