@@ -1,42 +1,30 @@
 package com.thoughtworks.di;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-
 public class BindingBuilder<T> {
-    private String name;
-    private Class<T> type;
-    private final List<Class<?>> constructorArgTypes;
-    private final List<Object> constructorArgValues;
-    private Map<String, Object> properties;
+    private Binding<T> binding;
 
     public BindingBuilder(Class<T> type) {
-        this.type = type;
-        this.constructorArgTypes = new LinkedList<Class<?>>();
-        this.constructorArgValues = new LinkedList<Object>();
-        this.properties = new HashMap<String, Object>();
-    }
-
-
-    public Binding<T> build() {
-        return new Binding<T>(name, type, constructorArgTypes, constructorArgValues, properties);
+        this.binding = new Binding<T>();
+        this.binding.setType(type);
     }
 
     public BindingBuilder<T> constructorArg(Class<?> type, Object value) {
-        this.constructorArgTypes.add(type);
-        this.constructorArgValues.add(value);
+        this.binding.addConstructorArgTypes(type);
+        this.binding.addConstructorArgValues(value);
         return this;
     }
 
     public BindingBuilder<T> to(String name) {
-        this.name = name;
+        this.binding.setName(name);
         return this;
     }
 
     public BindingBuilder property(String name, Object value) {
-        this.properties.put(name, value);
+        this.binding.addProperties(name, value);
         return this;
+    }
+
+    public Binding<T> build() {
+        return this.binding;
     }
 }
