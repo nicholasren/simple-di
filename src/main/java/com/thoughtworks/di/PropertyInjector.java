@@ -15,7 +15,7 @@ class PropertyInjector<T> {
         this.type = type;
     }
 
-    public void addProperties(String name, Object value) {
+    public void property(String name, Object value) {
         properties.put(name, value);
     }
 

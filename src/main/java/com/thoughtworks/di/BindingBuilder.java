@@ -13,7 +13,7 @@ public class BindingBuilder<T> {
     }
 
     public BindingBuilder<T> constructorArg(Class<?> type, Object value) {
-        binding.addConstructorArg(new ConstructorArg(type, value));
+        binding.constructorArg(new ConstructorArg(type, value));
         return this;
     }
 
@@ -23,7 +23,7 @@ public class BindingBuilder<T> {
     }
 
     public BindingBuilder<T> property(String name, Object value) {
-        this.binding.addProperties(name, value);
+        this.binding.property(name, value);
         return this;
     }
 

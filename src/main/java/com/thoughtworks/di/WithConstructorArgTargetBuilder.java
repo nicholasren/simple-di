@@ -19,10 +19,6 @@ class WithConstructorArgTargetBuilder<T> implements TargetBuilder<T> {
         this.type = type;
     }
 
-    public void addConstructorArg(ConstructorArg arg) {
-        constructorArgs.add(arg);
-    }
-
     @Override
     public T build() {
         T target;
@@ -60,4 +56,7 @@ class WithConstructorArgTargetBuilder<T> implements TargetBuilder<T> {
         }).toArray(new Class<?>[0]);
     }
 
+    public void constructorArg(ConstructorArg arg) {
+        this.constructorArgs.add(arg);
+    }
 }
