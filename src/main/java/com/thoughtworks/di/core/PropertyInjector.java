@@ -1,4 +1,4 @@
-package com.thoughtworks.di;
+package com.thoughtworks.di.core;
 
 import com.thoughtworks.di.exception.BeanCreationException;
 
@@ -6,7 +6,7 @@ import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 
-class PropertyInjector<T> {
+public class PropertyInjector<T> {
 
     private Map<String, Object> properties = new HashMap<String, Object>();
     private final Class<T> type;

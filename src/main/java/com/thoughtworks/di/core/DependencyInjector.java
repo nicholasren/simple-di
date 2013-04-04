@@ -1,12 +1,13 @@
-package com.thoughtworks.di;
+package com.thoughtworks.di.core;
 
+import com.thoughtworks.di.core.Injector;
 import com.thoughtworks.di.exception.BeanCreationException;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 
-class DependencyInjector<T> {
+public class DependencyInjector<T> {
 
     private Map<String, String> dependencies = new HashMap<String, String>();
     private Injector injector;

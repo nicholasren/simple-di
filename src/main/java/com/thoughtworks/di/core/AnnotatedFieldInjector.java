@@ -1,15 +1,16 @@
-package com.thoughtworks.di;
+package com.thoughtworks.di.core;
 
+import com.thoughtworks.di.core.Injector;
 import com.thoughtworks.di.exception.BeanCreationException;
 
 import java.lang.reflect.Field;
 
-class AnnotatedFieldInjector<T> {
+public class AnnotatedFieldInjector<T> {
 
     private Class type;
     private Injector injector;
 
-    AnnotatedFieldInjector(Class type) {
+    public AnnotatedFieldInjector(Class type) {
         this.type = type;
     }
 

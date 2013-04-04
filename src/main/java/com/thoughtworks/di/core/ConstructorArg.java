@@ -1,4 +1,4 @@
-package com.thoughtworks.di;
+package com.thoughtworks.di.core;
 
 public class ConstructorArg<T> {
     private Class<T> type;

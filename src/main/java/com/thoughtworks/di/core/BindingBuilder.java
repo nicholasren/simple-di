@@ -1,4 +1,4 @@
-package com.thoughtworks.di;
+package com.thoughtworks.di.core;
 
 public class BindingBuilder<T> {
     private Binding<T> binding;

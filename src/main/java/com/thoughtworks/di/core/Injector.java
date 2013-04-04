@@ -1,12 +1,10 @@
-package com.thoughtworks.di;
+package com.thoughtworks.di.core;
 
 
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
-import com.thoughtworks.di.exception.BeanCreationException;
 
-import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.Collection;
 

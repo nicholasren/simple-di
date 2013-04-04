@@ -1,4 +1,4 @@
-package com.thoughtworks.di;
+package com.thoughtworks.di.core;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Collections2;
@@ -9,7 +9,7 @@ import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.List;
 
-class WithConstructorArgTargetBuilder<T> implements TargetBuilder<T> {
+public class WithConstructorArgTargetBuilder<T> implements TargetBuilder<T> {
 
     private List<ConstructorArg> constructorArgs = new ArrayList<ConstructorArg>();
     private final Class<T> type;

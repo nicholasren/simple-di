@@ -4,6 +4,8 @@ import com.example.Phone;
 import com.example.Service;
 import com.example.ServiceImpl;
 import com.example.User;
+import com.thoughtworks.di.core.Configuration;
+import com.thoughtworks.di.core.Injector;
 import com.thoughtworks.di.exception.BeanCreationException;
 import org.junit.Test;
 
@@ -17,7 +19,7 @@ public class InjectorTest {
     @Test
     public void should_create_bean_through_default_constructor() {
         Injector injector = Injector.create(new Configuration() {
-            protected void configure() {
+             protected void configure() {
                 bind(com.example.User.class).to("user");
             }
         });
@@ -51,7 +53,7 @@ public class InjectorTest {
     public void should_return_bean_though_interface() {
         Injector injector = Injector.create(new Configuration() {
             @Override
-            void configure() {
+            protected void configure() {
                 bind(ServiceImpl.class).property("version", "1.0");
             }
         });
@@ -63,7 +65,7 @@ public class InjectorTest {
     public void should_return_bean_though_type() {
         Injector injector = Injector.create(new Configuration() {
             @Override
-            void configure() {
+            protected void configure() {
                 bind(ServiceImpl.class).property("version", "1.0");
             }
         });
@@ -75,7 +77,7 @@ public class InjectorTest {
     public void should_create_bean_though_setter_injecting() {
         Injector injector = Injector.create(new Configuration() {
             @Override
-            void configure() {
+            protected void configure() {
                 bind(User.class).to("user").property("name", "John");
             }
         });
