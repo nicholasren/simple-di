@@ -19,7 +19,7 @@ public class InjectorTest {
     @Test
     public void should_create_bean_through_default_constructor() {
         Injector injector = Injector.create(new Configuration() {
-             protected void configure() {
+            protected void configure() {
                 bind(com.example.User.class).to("user");
             }
         });

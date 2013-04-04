@@ -10,8 +10,9 @@
 
 1. constructor inject:
 
-		ApplicationLoader.create('phone')
+		injector.bind('phone')
 		.type(com.example.Phone)
+		.withConstructorArg()
 		.constructorArg('type', 'Samsung')
 		.constructorArg('serialNo', 'HJKLERTYUFGHJK2234567')
 		.in('prototype')
@@ -29,5 +30,9 @@
 4. inject bean depends on type DONE
     4.1 create and get bean by type DONE
 5. do not need to type cast when get bean DONE
+
 6. create named bean support collection inject
-7. circle dependency
+
+7. container scope
+
+8. annotatiable @Component
