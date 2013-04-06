@@ -17,8 +17,8 @@ public class BindingBuilder<T> {
         return this;
     }
 
-    public BindingBuilder<T> to(String name) {
-        this.binding.setName(name);
+    public BindingBuilder<T> toId(String id) {
+        this.binding.setId(id);
         return this;
     }
 

@@ -12,10 +12,16 @@ import java.util.Collection;
 public class Injector {
 
     private final Collection<Binding> bindings;
+    private final Injector parent;
 
     public Injector(Collection<Binding> bindings) {
+        this(bindings, null);
+    }
+
+    public Injector(Collection<Binding> bindings, Injector parent) {
         this.bindings = bindings;
         injectingContainer(this.bindings);
+        this.parent = parent;
     }
 
 
@@ -25,12 +31,18 @@ public class Injector {
         return new Injector(bindings);
     }
 
+    public static Injector create(Configuration configuration, Injector parent) {
+        configuration.configure();
+        Collection<Binding> bindings = buildBindings(configuration);
+        return new Injector(bindings, parent);
+    }
+
 
     public <T> T get(final String name, Class<T> type) {
         Collection<Binding> foundBindings = Collections2.filter(bindings, new Predicate<Binding>() {
             @Override
             public boolean apply(@javax.annotation.Nullable Binding binding) {
-                return binding.getName().equals(name);
+                return binding.getId().equals(name);
             }
         });
 
@@ -50,7 +62,15 @@ public class Injector {
                 return Arrays.asList(actual.getInterfaces()).contains(clazz) || actual.equals(clazz);
             }
         });
-        return firstOf(foundBindings);
+
+        T bean = firstOf(foundBindings);
+
+        if (bean == null && parent != null) {
+            return parent.get(type);
+        }
+
+        return bean;
+
     }
 
     private static Collection<Binding> buildBindings(Configuration configuration) {
@@ -61,6 +81,7 @@ public class Injector {
             }
         });
     }
+
 
     private void injectingContainer(Collection<Binding> bindings) {
         for (Binding binding : bindings) {

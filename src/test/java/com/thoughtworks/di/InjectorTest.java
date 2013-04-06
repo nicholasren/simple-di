@@ -1,15 +1,13 @@
 package com.thoughtworks.di;
 
-import com.example.Phone;
-import com.example.Service;
-import com.example.ServiceImpl;
-import com.example.User;
+import com.example.*;
 import com.thoughtworks.di.core.Configuration;
 import com.thoughtworks.di.core.Injector;
 import com.thoughtworks.di.exception.BeanCreationException;
 import org.junit.Test;
 
 import static junit.framework.Assert.assertTrue;
+import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNull.notNullValue;
 import static org.junit.Assert.assertThat;
@@ -20,33 +18,33 @@ public class InjectorTest {
     public void should_create_bean_through_default_constructor() {
         Injector injector = Injector.create(new Configuration() {
             protected void configure() {
-                bind(com.example.User.class).to("user");
+                bind(ClassWithDefaultConstructor.class).toId("user");
             }
         });
-        assertThat(injector.get("user", User.class), notNullValue());
+        assertThat(injector.get("user", ClassWithDefaultConstructor.class), notNullValue());
     }
 
     @Test(expected = BeanCreationException.class)
     public void should_throw_error_when_creating_a_instance_of_interface() {
         Injector injector = Injector.create(new Configuration() {
             protected void configure() {
-                bind(Service.class);
+                bind(AInterface.class);
             }
         });
-        injector.get(Service.class);
+        injector.get(AInterface.class);
     }
 
     @Test
     public void should_create_multi_bean_through_default_constructor() {
         Injector injector = Injector.create(new Configuration() {
             protected void configure() {
-                bind(com.example.User.class).to("user");
-                bind(com.example.Phone.class).to("phone");
+                bind(ClassWithDefaultConstructor.class).toId("user");
+                bind(com.example.AnotherClassWithDefaultConstructor.class).toId("phone");
             }
         });
 
-        assertTrue(injector.get("user", User.class) instanceof com.example.User);
-        assertTrue(injector.get("phone", Phone.class) instanceof com.example.Phone);
+        assertThat(injector.get(ClassWithDefaultConstructor.class), instanceOf(ClassWithDefaultConstructor.class));
+        assertThat(injector.get(AnotherClassWithDefaultConstructor.class), instanceOf(AnotherClassWithDefaultConstructor.class));
     }
 
     @Test
@@ -54,11 +52,10 @@ public class InjectorTest {
         Injector injector = Injector.create(new Configuration() {
             @Override
             protected void configure() {
-                bind(ServiceImpl.class).property("version", "1.0");
+                bind(AClass.class);
             }
         });
-
-        assertTrue(injector.get(Service.class) instanceof ServiceImpl);
+        assertThat(injector.get(AInterface.class), instanceOf(AInterface.class));
     }
 
     @Test
@@ -66,11 +63,11 @@ public class InjectorTest {
         Injector injector = Injector.create(new Configuration() {
             @Override
             protected void configure() {
-                bind(ServiceImpl.class).property("version", "1.0");
+                bind(AClass.class);
             }
         });
 
-        assertTrue(injector.get(ServiceImpl.class) instanceof ServiceImpl);
+        assertThat(injector.get(AClass.class), instanceOf(AClass.class));
     }
 
     @Test
@@ -78,11 +75,11 @@ public class InjectorTest {
         Injector injector = Injector.create(new Configuration() {
             @Override
             protected void configure() {
-                bind(User.class).to("user").property("name", "John");
+                bind(ClassWithSetter.class).toId("user").property("name", "John");
             }
         });
 
-        assertThat(injector.get("user", User.class).getName(), is("John"));
+        assertThat(injector.get("user", ClassWithSetter.class).getName(), is("John"));
     }
 
 
@@ -90,34 +87,68 @@ public class InjectorTest {
     public void should_create_bean_though_constructor_arg_injecting() {
         Injector injector = Injector.create(new Configuration() {
             protected void configure() {
-                bind(User.class).to("user").withConstructorArg().constructorArg(String.class, "John");
+                bind(ClassWithArgedConstructor.class).toId("user").withConstructorArg().constructorArg(String.class, "John");
             }
         });
 
-        assertThat((injector.get("user", User.class)).getName(), is("John"));
+        assertThat((injector.get("user", ClassWithArgedConstructor.class)).getArg(), is("John"));
     }
 
     @Test
     public void should_resolve_bean_dependency_by_reference() {
         Injector injector = Injector.create(new Configuration() {
             protected void configure() {
-                bind(Phone.class).to("phone1").property("type", "Samsung");
-                bind(User.class).to("user").depends("phone", "phone1");
+                bind(ClassWithProperty.class).toId("phone").property("property", "Samsung");
+                bind(ClassWithReferenceProperty.class).toId("user").depends("refProperty", "phone");
             }
         });
 
-        assertThat(injector.get("user", User.class).getPhone().getType(), is("Samsung"));
+        assertThat(injector.get("user", ClassWithReferenceProperty.class).getReferenceProperty().getProperty(), is("Samsung"));
     }
 
     @Test
     public void should_resolve_bean_dependency_by_type() {
         Injector injector = Injector.create(new Configuration() {
             protected void configure() {
-                bind(ServiceImpl.class).property("version", "1.0");
-                bind(User.class);
+                bind(ClassWithProperty.class).property("property", "1.0");
+                bind(ClassWithAnnotatedField.class);
             }
         });
 
-        assertThat(injector.get(User.class).getService().getVersion(), is("1.0"));
+        assertThat(injector.get(ClassWithAnnotatedField.class).getField().getProperty(), is("1.0"));
+    }
+
+    @Test
+    public void should_find_bean_from_parent_container() {
+        Injector parent = Injector.create(new Configuration() {
+            protected void configure() {
+                bind(AnotherClassWithDefaultConstructor.class);
+            }
+        });
+
+        Injector child = Injector.create(new Configuration() {
+            protected void configure() {
+                bind(ClassWithDefaultConstructor.class);
+            }
+        }, parent);
+
+        assertThat(child.get(AnotherClassWithDefaultConstructor.class), notNullValue());
+    }
+
+    @Test
+    public void bean_from_child_container_has_higher_priority() {
+        Injector parent = Injector.create(new Configuration() {
+            protected void configure() {
+                bind(ClassWithProperty.class).property("property", "Apple");
+            }
+        });
+
+        Injector child = Injector.create(new Configuration() {
+            protected void configure() {
+                bind(ClassWithProperty.class).property("property", "Samsung");
+            }
+        }, parent);
+
+        assertThat(child.get(ClassWithProperty.class).getProperty(), is("Samsung"));
     }
 }
