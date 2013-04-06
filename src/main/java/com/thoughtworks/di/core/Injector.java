@@ -11,44 +11,30 @@ import java.util.Collection;
 
 public class Injector {
 
-    private final Collection<Binding> bindings;
-    private final Injector parent;
-
-    public Injector(Collection<Binding> bindings) {
-        this(bindings, null);
-    }
-
-    public Injector(Collection<Binding> bindings, Injector parent) {
-        this.bindings = bindings;
-        injectingContainer(this.bindings);
-        this.parent = parent;
-    }
-
+    private static Injector NULL = new NullInjector();
+    private Collection<Binding> bindings;
+    private Injector parent = NULL;
 
     public static Injector create(Configuration configuration) {
-        configuration.configure();
-        Collection<Binding> bindings = buildBindings(configuration);
-        return new Injector(bindings);
+        return create(configuration, null);
     }
 
     public static Injector create(Configuration configuration, Injector parent) {
         configuration.configure();
-        Collection<Binding> bindings = buildBindings(configuration);
-        return new Injector(bindings, parent);
+        return new Injector(buildBindings(configuration), parent);
     }
 
-
-    public <T> T get(final String name, Class<T> type) {
+    public <T> T get(final String id, Class<T> type) {
         Collection<Binding> foundBindings = Collections2.filter(bindings, new Predicate<Binding>() {
             @Override
             public boolean apply(@javax.annotation.Nullable Binding binding) {
-                return binding.getId().equals(name);
+                return binding.getId().equals(id);
             }
         });
 
-        return firstOf(foundBindings);
-    }
+        return foundBindings.isEmpty() ? parent.get(id, type) : (T) firstOf(foundBindings);
 
+    }
 
     public <T> T get(final Class<T> type) {
 
@@ -63,14 +49,7 @@ public class Injector {
             }
         });
 
-        T bean = firstOf(foundBindings);
-
-        if (bean == null && parent != null) {
-            return parent.get(type);
-        }
-
-        return bean;
-
+        return foundBindings.isEmpty() ? parent.get(type) : (T) firstOf(foundBindings);
     }
 
     private static Collection<Binding> buildBindings(Configuration configuration) {
@@ -93,5 +72,23 @@ public class Injector {
         return bindings.isEmpty() ? null : (T) bindings.toArray(new Binding[0])[0].getTarget();
     }
 
+    private Injector(Collection<Binding> bindings, Injector parent) {
+        this.bindings = bindings;
+        injectingContainer(this.bindings);
+        this.parent = parent;
+    }
+
+    private Injector() {
+    }
+
+    private static class NullInjector extends Injector {
+        public <T> T get(final String id, Class<T> type) {
+            return null;
+        }
+
+        public <T> T get(Class<T> type) {
+            return null;
+        }
+    }
 
 }

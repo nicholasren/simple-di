@@ -25,15 +25,18 @@
 
 ####tasks:
 1. create named bean through constructor inject only support primitive data type DONE
+
 2. create named bean through setter inject DONE
+
 3. create named bean that depends on another bean DONE
+
 4. inject bean depends on type DONE
     4.1 create and get bean by type DONE
+
 5. do not need to type cast when get bean DONE
 
-6. parent container scope
+6. parent container scope DONE
 
+7. support collection inject
 
-7. create named bean support collection inject
-
-8. annotatiable @Component
+8. annotation @Component
