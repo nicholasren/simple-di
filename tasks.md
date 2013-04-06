@@ -31,8 +31,9 @@
     4.1 create and get bean by type DONE
 5. do not need to type cast when get bean DONE
 
-6. create named bean support collection inject
+6. parent container scope
 
-7. container scope
+
+7. create named bean support collection inject
 
 8. annotatiable @Component
