@@ -8,7 +8,7 @@ public class BindingBuilder<T> {
     }
 
     public BindingBuilder<T> withConstructorArg() {
-        this.binding.withConstructorArg();
+        this.binding.setTargetBuilder(new WithConstructorArgTargetBuilder<T>(this.binding.getType()));
         return this;
     }
 

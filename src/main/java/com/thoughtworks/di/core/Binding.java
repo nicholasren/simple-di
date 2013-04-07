@@ -34,10 +34,6 @@ public class Binding<T> {
         ((WithConstructorArgTargetBuilder) this.targetBuilder).constructorArg(arg);
     }
 
-    public void withConstructorArg() {
-        this.targetBuilder = new WithConstructorArgTargetBuilder<T>(type);
-    }
-
     public void property(String name, Object value) {
         this.propertyInjector.property(name, value);
     }
@@ -57,5 +53,9 @@ public class Binding<T> {
 
     public Class<T> getType() {
         return type;
+    }
+
+    public void setTargetBuilder(WithConstructorArgTargetBuilder<T> targetBuilder) {
+        this.targetBuilder = targetBuilder;
     }
 }
