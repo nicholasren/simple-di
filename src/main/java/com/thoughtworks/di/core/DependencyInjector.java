@@ -10,7 +10,6 @@ import java.util.Map;
 public class DependencyInjector<T> {
 
     private Map<String, String> dependencies = new HashMap<String, String>();
-    private Injector injector;
     private final Class<T> type;
 
     public DependencyInjector(Class type) {
@@ -21,7 +20,7 @@ public class DependencyInjector<T> {
         dependencies.put(propertyName, beanName);
     }
 
-    public void inject(T target) {
+    public void inject(T target, Injector injector) {
         if (!dependencies.isEmpty()) {
             try {
                 for (Map.Entry<String, String> entry : dependencies.entrySet()) {
@@ -34,9 +33,5 @@ public class DependencyInjector<T> {
                 throw new BeanCreationException(e);
             }
         }
-    }
-
-    public void setInjector(Injector injector) {
-        this.injector = injector;
     }
 }

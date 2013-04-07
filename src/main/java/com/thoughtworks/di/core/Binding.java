@@ -17,15 +17,15 @@ public class Binding<T> {
         this.annotatedFieldInjector = new AnnotatedFieldInjector(type);
     }
 
-    public T getTarget() {
+    public T getTarget(Injector injector) {
 
         T target = (T) this.targetBuilder.build();
 
         this.propertyInjector.inject(target);
 
-        this.dependencyInjector.inject(target);
+        this.dependencyInjector.inject(target, injector);
 
-        this.annotatedFieldInjector.inject(target);
+        this.annotatedFieldInjector.inject(target, injector);
 
         return target;
     }
@@ -45,12 +45,6 @@ public class Binding<T> {
 
     public void depends(String propertyName, String beanName) {
         this.dependencyInjector.depends(propertyName, beanName);
-    }
-
-
-    public void setInjector(Injector injector) {
-        this.dependencyInjector.setInjector(injector);
-        this.annotatedFieldInjector.setInjector(injector);
     }
 
     public void setId(String id) {

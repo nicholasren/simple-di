@@ -62,19 +62,13 @@ public class Injector {
     }
 
 
-    private void injectingContainer(Collection<Binding> bindings) {
-        for (Binding binding : bindings) {
-            binding.setInjector(this);
-        }
-    }
 
     private <T> T firstOf(Collection<Binding> bindings) {
-        return bindings.isEmpty() ? null : (T) bindings.toArray(new Binding[0])[0].getTarget();
+        return bindings.isEmpty() ? null : (T) bindings.toArray(new Binding[0])[0].getTarget(this);
     }
 
     private Injector(Collection<Binding> bindings, Injector parent) {
         this.bindings = bindings;
-        injectingContainer(this.bindings);
         this.parent = parent;
     }
 
