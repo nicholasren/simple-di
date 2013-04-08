@@ -177,6 +177,7 @@ public class InjectorTest {
         injector.get(ClassWithAnnotatedNonSetter.class);
     }
 
+    @Test
     public void should_bind_interface_to_implementation() throws InstantiationException, IllegalAccessException {
 
 
