@@ -13,8 +13,6 @@ public class Binding<T> {
     public Binding(Class<T> type) {
         this.type = type;
         this.targetBuilder = new DefaultTargetBuilder(type);
-        this.propertyInjector = new PropertyInjector(type);
-        this.dependentReferenceInjector = new DependentReferenceInjector(type);
         this.annotatedFieldInjector = new AnnotatedFieldInjector(type);
         this.annotatedSetterInjector = new AnnotatedSetterInjector<T>(type);
     }
@@ -23,12 +21,15 @@ public class Binding<T> {
 
         T target = (T) this.targetBuilder.build();
 
-        this.propertyInjector.inject(target, injector);
+        if(null != propertyInjector){
+            this.propertyInjector.inject(target, injector);
+        }
 
-        this.dependentReferenceInjector.inject(target, injector);
+        if(null != dependentReferenceInjector){
+            this.dependentReferenceInjector.inject(target, injector);
+        }
 
         this.annotatedFieldInjector.inject(target, injector);
-
         this.annotatedSetterInjector.inject(target, injector);
 
         return target;
@@ -39,11 +40,17 @@ public class Binding<T> {
     }
 
     public void property(String name, Object value) {
+        if (null == this.propertyInjector) {
+            this.propertyInjector = new PropertyInjector(type);
+        }
         this.propertyInjector.property(name, value);
     }
 
 
     public void depends(String propertyName, String beanName) {
+        if (null == this.dependentReferenceInjector) {
+            this.dependentReferenceInjector = new DependentReferenceInjector(type);
+        }
         this.dependentReferenceInjector.depends(propertyName, beanName);
     }
 

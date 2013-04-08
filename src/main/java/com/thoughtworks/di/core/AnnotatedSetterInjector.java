@@ -3,20 +3,31 @@ package com.thoughtworks.di.core;
 import com.thoughtworks.di.exception.BeanCreationException;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
 
 public class AnnotatedSetterInjector<T> extends DependencyInjector<T> {
 
+    private List<Method> annotatedSetters = new ArrayList<Method>();
+
     public AnnotatedSetterInjector(Class type) {
         super(type);
+        extractAnnotatedSetters();
+    }
+
+    private void extractAnnotatedSetters() {
+        for (Method method : type.getMethods()) {
+            if (method.isAnnotationPresent(javax.inject.Inject.class)) {
+                annotatedSetters.add(method);
+            }
+        }
     }
 
     public void inject(T target, Injector injector) {
 
-        for (Method method : type.getMethods()) {
-            if (method.isAnnotationPresent(javax.inject.Inject.class)) {
-                Object value = injector.get(getRequiredType(method));
-                setValue(target, method, value);
-            }
+        for (Method method : annotatedSetters) {
+            Object value = injector.get(getRequiredType(method));
+            setValue(target, method, value);
         }
 
     }
