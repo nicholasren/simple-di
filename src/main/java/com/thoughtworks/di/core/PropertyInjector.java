@@ -6,20 +6,20 @@ import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 
-public class PropertyInjector<T> {
+public class PropertyInjector<T> extends DependencyInjector<T> {
 
     private Map<String, Object> properties = new HashMap<String, Object>();
-    private final Class<T> type;
 
     public PropertyInjector(Class<T> type) {
-        this.type = type;
+        super(type);
     }
 
     public void property(String name, Object value) {
         properties.put(name, value);
     }
 
-    public void inject(T target) {
+    @Override
+    public void inject(T target, Injector injector) {
         if (!properties.isEmpty()) {
             try {
                 for (Map.Entry<String, Object> entry : properties.entrySet()) {

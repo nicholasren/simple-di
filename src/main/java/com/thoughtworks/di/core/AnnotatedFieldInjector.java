@@ -4,12 +4,10 @@ import com.thoughtworks.di.exception.BeanCreationException;
 
 import java.lang.reflect.Field;
 
-public class AnnotatedFieldInjector<T> {
-
-    private Class type;
+public class AnnotatedFieldInjector<T> extends DependencyInjector<T> {
 
     public AnnotatedFieldInjector(Class type) {
-        this.type = type;
+        super(type);
     }
 
     public void inject(T target, Injector injector) {

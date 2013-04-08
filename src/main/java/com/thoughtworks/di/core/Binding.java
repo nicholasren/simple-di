@@ -5,27 +5,31 @@ public class Binding<T> {
     private Class<T> type;
     private TargetBuilder targetBuilder;
     private PropertyInjector propertyInjector;
-    private DependencyInjector dependencyInjector;
+    private DependentReferenceInjector dependentReferenceInjector;
     private AnnotatedFieldInjector annotatedFieldInjector;
+    private AnnotatedSetterInjector<T> annotatedSetterInjector;
 
 
     public Binding(Class<T> type) {
         this.type = type;
         this.targetBuilder = new DefaultTargetBuilder(type);
         this.propertyInjector = new PropertyInjector(type);
-        this.dependencyInjector = new DependencyInjector(type);
+        this.dependentReferenceInjector = new DependentReferenceInjector(type);
         this.annotatedFieldInjector = new AnnotatedFieldInjector(type);
+        this.annotatedSetterInjector = new AnnotatedSetterInjector<T>(type);
     }
 
     public T getTarget(Injector injector) {
 
         T target = (T) this.targetBuilder.build();
 
-        this.propertyInjector.inject(target);
+        this.propertyInjector.inject(target, injector);
 
-        this.dependencyInjector.inject(target, injector);
+        this.dependentReferenceInjector.inject(target, injector);
 
         this.annotatedFieldInjector.inject(target, injector);
+
+        this.annotatedSetterInjector.inject(target, injector);
 
         return target;
     }
@@ -40,7 +44,7 @@ public class Binding<T> {
 
 
     public void depends(String propertyName, String beanName) {
-        this.dependencyInjector.depends(propertyName, beanName);
+        this.dependentReferenceInjector.depends(propertyName, beanName);
     }
 
     public void setId(String id) {

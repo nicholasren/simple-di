@@ -1,37 +1,12 @@
 package com.thoughtworks.di.core;
 
-import com.thoughtworks.di.core.Injector;
-import com.thoughtworks.di.exception.BeanCreationException;
+public abstract class DependencyInjector<T> {
 
-import java.lang.reflect.Field;
-import java.util.HashMap;
-import java.util.Map;
+    protected final Class<T> type;
 
-public class DependencyInjector<T> {
-
-    private Map<String, String> dependencies = new HashMap<String, String>();
-    private final Class<T> type;
-
-    public DependencyInjector(Class type) {
+    public DependencyInjector(Class<T> type) {
         this.type = type;
     }
 
-    public void depends(String propertyName, String beanName) {
-        dependencies.put(propertyName, beanName);
-    }
-
-    public void inject(T target, Injector injector) {
-        if (!dependencies.isEmpty()) {
-            try {
-                for (Map.Entry<String, String> entry : dependencies.entrySet()) {
-                    Object value = injector.get(entry.getValue(), target.getClass());
-                    Field field = type.getDeclaredField(entry.getKey());
-                    field.setAccessible(true);
-                    field.set(target, value);
-                }
-            } catch (Exception e) {
-                throw new BeanCreationException(e);
-            }
-        }
-    }
+    abstract void inject(T target, Injector injector);
 }

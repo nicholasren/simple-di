@@ -151,4 +151,27 @@ public class InjectorTest {
 
         assertThat(child.get(ClassWithProperty.class).getProperty(), is("Samsung"));
     }
+
+    @Test
+    public void should_resolve_dependency_though_annotated_setter() {
+        Injector injector = Injector.create(new Configuration() {
+            @Override
+            protected void configure() {
+                create(ClassWithAnnotatedSetter.class);
+                create(ClassWithDefaultConstructor.class);
+            }
+        });
+        assertThat(injector.get(ClassWithAnnotatedSetter.class).getField(), instanceOf(ClassWithDefaultConstructor.class));
+    }
+
+    @Test(expected = BeanCreationException.class)
+    public void should_throw_error_when_annotated_method_is_not_setter(){
+        Injector injector = Injector.create(new Configuration() {
+            @Override
+            protected void configure() {
+                create(ClassWithAnnotatedNonSetter.class);
+            }
+        });
+        injector.get(ClassWithAnnotatedNonSetter.class);
+    }
 }

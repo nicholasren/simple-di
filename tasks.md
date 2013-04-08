@@ -37,10 +37,8 @@
 
 6. parent container scope DONE
 
-
 7. bind a interface to provided implementation  ZXY
 
+8. support setter annotation injecting
 
-7. support collection inject
-
-8. annotation @Component
+9. annotation @Component
