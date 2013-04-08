@@ -10,7 +10,7 @@ public abstract class Configuration {
 
 
 
-    public <T> BindingBuilder bind(Class<T> clazz) {
+    public <T> BindingBuilder create(Class<T> clazz) {
         BindingBuilder builder = new BindingBuilder(clazz);
         builders.add(builder);
         return builder;

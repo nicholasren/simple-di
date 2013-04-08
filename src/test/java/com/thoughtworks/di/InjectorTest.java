@@ -18,7 +18,7 @@ public class InjectorTest {
     public void should_create_bean_through_default_constructor() {
         Injector injector = Injector.create(new Configuration() {
             protected void configure() {
-                bind(ClassWithDefaultConstructor.class).toId("user");
+                create(ClassWithDefaultConstructor.class).toId("user");
             }
         });
         assertThat(injector.get("user", ClassWithDefaultConstructor.class), notNullValue());
@@ -28,7 +28,7 @@ public class InjectorTest {
     public void should_throw_error_when_creating_a_instance_of_interface() {
         Injector injector = Injector.create(new Configuration() {
             protected void configure() {
-                bind(AInterface.class);
+                create(AInterface.class);
             }
         });
         injector.get(AInterface.class);
@@ -38,8 +38,8 @@ public class InjectorTest {
     public void should_create_multi_bean_through_default_constructor() {
         Injector injector = Injector.create(new Configuration() {
             protected void configure() {
-                bind(ClassWithDefaultConstructor.class).toId("user");
-                bind(com.example.AnotherClassWithDefaultConstructor.class).toId("phone");
+                create(ClassWithDefaultConstructor.class).toId("user");
+                create(com.example.AnotherClassWithDefaultConstructor.class).toId("phone");
             }
         });
 
@@ -52,10 +52,10 @@ public class InjectorTest {
         Injector injector = Injector.create(new Configuration() {
             @Override
             protected void configure() {
-                bind(AClass.class);
+                create(AClass.class);
             }
         });
-        assertThat(injector.get(AInterface.class), instanceOf(AInterface.class));
+        assertThat(injector.get(AInterface.class), instanceOf(AClass.class));
     }
 
     @Test
@@ -63,7 +63,7 @@ public class InjectorTest {
         Injector injector = Injector.create(new Configuration() {
             @Override
             protected void configure() {
-                bind(AClass.class);
+                create(AClass.class);
             }
         });
 
@@ -75,7 +75,7 @@ public class InjectorTest {
         Injector injector = Injector.create(new Configuration() {
             @Override
             protected void configure() {
-                bind(ClassWithSetter.class).toId("user").property("name", "John");
+                create(ClassWithSetter.class).toId("user").property("name", "John");
             }
         });
 
@@ -87,7 +87,7 @@ public class InjectorTest {
     public void should_create_bean_though_constructor_arg_injecting() {
         Injector injector = Injector.create(new Configuration() {
             protected void configure() {
-                bind(ClassWithArgedConstructor.class).toId("user").withConstructorArg().constructorArg(String.class, "John");
+                create(ClassWithArgedConstructor.class).toId("user").withConstructorArg().constructorArg(String.class, "John");
             }
         });
 
@@ -98,8 +98,8 @@ public class InjectorTest {
     public void should_resolve_bean_dependency_by_reference() {
         Injector injector = Injector.create(new Configuration() {
             protected void configure() {
-                bind(ClassWithProperty.class).toId("phone").property("property", "Samsung");
-                bind(ClassWithReferenceProperty.class).toId("user").depends("refProperty", "phone");
+                create(ClassWithProperty.class).toId("phone").property("property", "Samsung");
+                create(ClassWithReferenceProperty.class).toId("user").depends("refProperty", "phone");
             }
         });
 
@@ -110,8 +110,8 @@ public class InjectorTest {
     public void should_resolve_bean_dependency_by_type() {
         Injector injector = Injector.create(new Configuration() {
             protected void configure() {
-                bind(ClassWithProperty.class).property("property", "1.0");
-                bind(ClassWithAnnotatedField.class);
+                create(ClassWithProperty.class).property("property", "1.0");
+                create(ClassWithAnnotatedField.class);
             }
         });
 
@@ -122,13 +122,13 @@ public class InjectorTest {
     public void should_find_bean_from_parent_container() {
         Injector parent = Injector.create(new Configuration() {
             protected void configure() {
-                bind(AnotherClassWithDefaultConstructor.class);
+                create(AnotherClassWithDefaultConstructor.class);
             }
         });
 
         Injector child = Injector.create(new Configuration() {
             protected void configure() {
-                bind(ClassWithDefaultConstructor.class);
+                create(ClassWithDefaultConstructor.class);
             }
         }, parent);
 
@@ -139,13 +139,13 @@ public class InjectorTest {
     public void bean_from_child_container_has_higher_priority() {
         Injector parent = Injector.create(new Configuration() {
             protected void configure() {
-                bind(ClassWithProperty.class).property("property", "Apple");
+                create(ClassWithProperty.class).property("property", "Apple");
             }
         });
 
         Injector child = Injector.create(new Configuration() {
             protected void configure() {
-                bind(ClassWithProperty.class).property("property", "Samsung");
+                create(ClassWithProperty.class).property("property", "Samsung");
             }
         }, parent);
 
