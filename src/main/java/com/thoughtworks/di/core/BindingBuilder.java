@@ -1,12 +1,18 @@
 package com.thoughtworks.di.core;
 
-import com.example.ImplementationOfAInterface;
 
 public class BindingBuilder<T> {
     private Binding<T> binding;
 
     public BindingBuilder(Class<T> type) {
-        this.binding = new Binding<T>(type);
+        if (type.isInterface()) {
+            this.binding = new Binding<T>();
+            this.binding.setInterfaceClass(type);
+        } else {
+            this.binding = new Binding<T>(type);
+            this.binding.makeInjectors();
+        }
+
     }
 
     public BindingBuilder<T> withConstructorArg() {
@@ -38,7 +44,8 @@ public class BindingBuilder<T> {
         return this;
     }
 
-    public void to(Class<T> implementationOfAInterfaceClass) {
-        this.binding.impClass(implementationOfAInterfaceClass);
+    public void to(Class<T> implementationType) {
+        this.binding.setType(implementationType);
+        this.binding.makeInjectors();
     }
 }

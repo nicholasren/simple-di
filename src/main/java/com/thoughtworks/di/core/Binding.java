@@ -8,24 +8,26 @@ public class Binding<T> {
     private DependentReferenceInjector dependentReferenceInjector;
     private AnnotatedFieldInjector annotatedFieldInjector;
     private AnnotatedSetterInjector<T> annotatedSetterInjector;
-    public Class<T> impClass;
+    private Class<T> interfaceClass;
 
     public Binding(Class<T> type) {
         this.type = type;
-        this.targetBuilder = new DefaultTargetBuilder(type);
-        this.annotatedFieldInjector = new AnnotatedFieldInjector(type);
-        this.annotatedSetterInjector = new AnnotatedSetterInjector<T>(type);
+    }
+
+
+    public Binding() {
+
     }
 
     public T getTarget(Injector injector) {
 
         T target = (T) this.targetBuilder.build();
 
-        if(null != propertyInjector){
+        if (null != propertyInjector) {
             this.propertyInjector.inject(target, injector);
         }
 
-        if(null != dependentReferenceInjector){
+        if (null != dependentReferenceInjector) {
             this.dependentReferenceInjector.inject(target, injector);
         }
 
@@ -70,7 +72,21 @@ public class Binding<T> {
         this.targetBuilder = targetBuilder;
     }
 
-    public void impClass(Class<T> implementationOfAInterfaceClass) {
-        this.impClass = implementationOfAInterfaceClass;
+    public void setType(Class<T> type) {
+        this.type = type;
+    }
+
+    public void setInterfaceClass(Class<T> interfaceClass) {
+        this.interfaceClass = interfaceClass;
+    }
+
+    public void makeInjectors() {
+        this.targetBuilder = new DefaultTargetBuilder(type);
+        this.annotatedFieldInjector = new AnnotatedFieldInjector(type);
+        this.annotatedSetterInjector = new AnnotatedSetterInjector<T>(type);
+    }
+
+    public Class<T> getInterfaceClass() {
+        return interfaceClass;
     }
 }

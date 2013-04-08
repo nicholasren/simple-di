@@ -6,9 +6,7 @@ import com.thoughtworks.di.core.Injector;
 import com.thoughtworks.di.exception.BeanCreationException;
 import org.junit.Test;
 
-import java.util.Calendar;
 
-import static junit.framework.Assert.assertTrue;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNull.notNullValue;
@@ -184,9 +182,11 @@ public class InjectorTest {
         Injector injector = Injector.create(new Configuration() {
             @Override
             protected void configure() {
+                create(AClass.class);
                 bind(AInterface.class).to(ImplementationOfAInterface.class);
+
             }
         });
-        assertThat(injector.getInstance(AInterface.class), instanceOf(ImplementationOfAInterface.class));
+        assertThat(injector.get(AInterface.class), instanceOf(ImplementationOfAInterface.class));
     }
 }

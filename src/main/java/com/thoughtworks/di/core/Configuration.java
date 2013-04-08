@@ -1,8 +1,6 @@
 package com.thoughtworks.di.core;
 
 
-import com.example.AInterface;
-
 import java.util.LinkedList;
 import java.util.List;
 
