@@ -89,7 +89,7 @@ public class Injector {
     }
 
     private <T> Collection<Binding> typeBound(final Class<T> type) {
-        Predicate<Binding> binddedTo = new Predicate<Binding>() {
+        Predicate<Binding> boundTo = new Predicate<Binding>() {
             @Override
             public boolean apply(Binding binding) {
                 if (binding.getType() == null) {
@@ -100,7 +100,7 @@ public class Injector {
         };
 
 
-        return Collections2.filter(bindings, binddedTo);
+        return Collections2.filter(bindings, boundTo);
     }
 
     private Injector() {
