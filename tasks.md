@@ -39,6 +39,4 @@
 
 7. bind a interface to provided implementation  ZXY
 
-8. support setter annotation injecting
-
-9. annotation @Component
+8. support setter annotation injecting DONE
