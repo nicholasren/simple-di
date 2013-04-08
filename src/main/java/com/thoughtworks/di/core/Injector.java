@@ -47,7 +47,11 @@ public class Injector {
 
         Collection<Binding> typeMatched = typeMatchedBindings(type);
 
-        return typeMatched.isEmpty() ? parent.get(type) : (T) firstOf(typeMatched);
+        if (!typeMatched.isEmpty()) {
+            return (T) firstOf(typeMatched);
+        }
+
+        return parent.get(type);
     }
 
 

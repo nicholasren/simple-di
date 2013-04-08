@@ -32,6 +32,7 @@ public class Binding<T> {
         }
 
         this.annotatedFieldInjector.inject(target, injector);
+
         this.annotatedSetterInjector.inject(target, injector);
 
         return target;
@@ -80,7 +81,7 @@ public class Binding<T> {
         this.interfaceClass = interfaceClass;
     }
 
-    public void makeInjectors() {
+    public void makeInjectors(Class<T> type) {
         this.targetBuilder = new DefaultTargetBuilder(type);
         this.annotatedFieldInjector = new AnnotatedFieldInjector(type);
         this.annotatedSetterInjector = new AnnotatedSetterInjector<T>(type);

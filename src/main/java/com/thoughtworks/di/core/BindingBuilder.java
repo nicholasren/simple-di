@@ -10,7 +10,7 @@ public class BindingBuilder<T> {
             this.binding.setInterfaceClass(type);
         } else {
             this.binding = new Binding<T>(type);
-            this.binding.makeInjectors();
+            this.binding.makeInjectors(type);
         }
 
     }
@@ -44,8 +44,8 @@ public class BindingBuilder<T> {
         return this;
     }
 
-    public void to(Class<T> implementationType) {
-        this.binding.setType(implementationType);
-        this.binding.makeInjectors();
+    public void to(Class<T> type) {
+        this.binding.setType(type);
+        this.binding.makeInjectors(type);
     }
 }
