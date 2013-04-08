@@ -1,5 +1,7 @@
 package com.thoughtworks.di.core;
 
+import com.example.ImplementationOfAInterface;
+
 public class BindingBuilder<T> {
     private Binding<T> binding;
 
@@ -34,5 +36,9 @@ public class BindingBuilder<T> {
     public BindingBuilder<T> depends(String propertyName, String beanName) {
         this.binding.depends(propertyName, beanName);
         return this;
+    }
+
+    public void to(Class<T> implementationOfAInterfaceClass) {
+        this.binding.impClass(implementationOfAInterfaceClass);
     }
 }

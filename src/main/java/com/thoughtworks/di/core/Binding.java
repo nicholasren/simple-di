@@ -8,7 +8,7 @@ public class Binding<T> {
     private DependentReferenceInjector dependentReferenceInjector;
     private AnnotatedFieldInjector annotatedFieldInjector;
     private AnnotatedSetterInjector<T> annotatedSetterInjector;
-
+    public Class<T> impClass;
 
     public Binding(Class<T> type) {
         this.type = type;
@@ -68,5 +68,9 @@ public class Binding<T> {
 
     public void setTargetBuilder(WithConstructorArgTargetBuilder<T> targetBuilder) {
         this.targetBuilder = targetBuilder;
+    }
+
+    public void impClass(Class<T> implementationOfAInterfaceClass) {
+        this.impClass = implementationOfAInterfaceClass;
     }
 }

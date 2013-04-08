@@ -6,6 +6,8 @@ import com.thoughtworks.di.core.Injector;
 import com.thoughtworks.di.exception.BeanCreationException;
 import org.junit.Test;
 
+import java.util.Calendar;
+
 import static junit.framework.Assert.assertTrue;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.core.Is.is;
@@ -165,7 +167,7 @@ public class InjectorTest {
     }
 
     @Test(expected = BeanCreationException.class)
-    public void should_throw_error_when_annotated_method_is_not_setter(){
+    public void should_throw_error_when_annotated_method_is_not_setter() {
         Injector injector = Injector.create(new Configuration() {
             @Override
             protected void configure() {
@@ -173,5 +175,17 @@ public class InjectorTest {
             }
         });
         injector.get(ClassWithAnnotatedNonSetter.class);
+    }
+
+    public void should_bind_interface_to_implementation() throws InstantiationException, IllegalAccessException {
+
+
+        Injector injector = Injector.create(new Configuration() {
+            @Override
+            protected void configure() {
+                bind(AInterface.class).to(ImplementationOfAInterface.class);
+            }
+        });
+        assertThat(injector.getInstance(AInterface.class), instanceOf(ImplementationOfAInterface.class));
     }
 }

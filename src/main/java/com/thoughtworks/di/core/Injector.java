@@ -1,6 +1,7 @@
 package com.thoughtworks.di.core;
 
 
+import com.example.AInterface;
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
@@ -34,6 +35,16 @@ public class Injector {
 
         return foundBindings.isEmpty() ? parent.get(id, type) : (T) firstOf(foundBindings);
 
+    }
+
+    public <T> T getInstance(final Class<T> interfaceClass) throws IllegalAccessException, InstantiationException {
+        Collection<Binding> foundBindings = Collections2.filter(bindings, new Predicate<Binding>() {
+            @Override
+            public boolean apply(Binding binding) {
+                return binding.getType() == interfaceClass;
+            }
+        });
+        return (T) foundBindings.toArray(new Binding[0])[0].impClass.newInstance();
     }
 
     public <T> T get(final Class<T> type) {
