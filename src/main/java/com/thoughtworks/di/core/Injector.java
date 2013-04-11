@@ -69,10 +69,6 @@ public class Injector {
         return bindings.isEmpty() ? null : (T) bindings.toArray(new Binding[0])[0].getTarget(this);
     }
 
-    private Injector(Collection<Binding> bindings, Injector parent) {
-        this.bindings = bindings;
-        this.parent = parent;
-    }
 
     private <T> Collection<Binding> typeMatchedBindings(final Class<T> type) {
         Predicate<Binding> typeOf = new Predicate<Binding>() {
@@ -105,6 +101,11 @@ public class Injector {
 
 
         return Collections2.filter(bindings, boundTo);
+    }
+
+    private Injector(Collection<Binding> bindings, Injector parent) {
+        this.bindings = bindings;
+        this.parent = parent;
     }
 
     private Injector() {
