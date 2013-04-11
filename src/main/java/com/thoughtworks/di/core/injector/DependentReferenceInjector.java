@@ -20,18 +20,24 @@ public class DependentReferenceInjector<T> extends DependencyInjector<T> {
     }
 
     @Override
-    public void inject(T target, Injector injector) {
+    public void inject(T target, Injector container) {
         if (!dependencies.isEmpty()) {
-            try {
-                for (Map.Entry<String, String> entry : dependencies.entrySet()) {
-                    Object value = injector.get(entry.getValue(), target.getClass());
-                    Field field = type.getDeclaredField(entry.getKey());
-                    field.setAccessible(true);
-                    field.set(target, value);
-                }
-            } catch (Exception e) {
-                throw new BeanCreationException(e);
+            for (Map.Entry<String, String> entry : dependencies.entrySet()) {
+                setField(target, container, entry.getKey(), entry.getValue());
             }
+
+        }
+    }
+
+    private void setField(T target, Injector container, String propertyName, String beanName) {
+        Object value = container.get(beanName, Object.class);
+
+        try {
+            Field field = type.getDeclaredField(propertyName);
+            field.setAccessible(true);
+            field.set(target, value);
+        } catch (Exception e) {
+            throw new BeanCreationException(e);
         }
     }
 }

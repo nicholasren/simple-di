@@ -1,5 +1,6 @@
 package com.thoughtworks.di.core.builder;
 
+import com.thoughtworks.di.core.ConstructorArg;
 import com.thoughtworks.di.exception.BeanCreationException;
 
 public class DefaultTargetBuilder<T> implements TargetBuilder<T> {
@@ -16,5 +17,9 @@ public class DefaultTargetBuilder<T> implements TargetBuilder<T> {
         } catch (Exception e) {
             throw new BeanCreationException(e);
         }
+    }
+
+    @Override
+    public void constructorArg(ConstructorArg arg) {
     }
 }

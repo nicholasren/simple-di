@@ -22,21 +22,20 @@ public class WithConstructorArgTargetBuilder<T> implements TargetBuilder<T> {
     @Override
     public T build() {
         T target;
-
-        Class<?>[] argsType = getConstructorArgsType();
-
-        Object[] argsValue = getConstructorArgsValue();
-
         try {
-            Constructor<T> constructor = this.type.getConstructor(argsType);
-            target = constructor.newInstance(argsValue);
+            Constructor<T> constructor = this.type.getConstructor(constructorArgsType());
+            target = constructor.newInstance(constructorArgsValue());
         } catch (Exception e) {
             throw new BeanCreationException(e);
         }
         return target;
     }
 
-    private Object[] getConstructorArgsValue() {
+    public void constructorArg(ConstructorArg arg) {
+        this.constructorArgs.add(arg);
+    }
+
+    private Object[] constructorArgsValue() {
         return Collections2.transform(this.constructorArgs, new Function<ConstructorArg, Object>() {
             @Override
             public Object apply(ConstructorArg arg) {
@@ -45,16 +44,12 @@ public class WithConstructorArgTargetBuilder<T> implements TargetBuilder<T> {
         }).toArray(new Object[0]);
     }
 
-    private Class<?>[] getConstructorArgsType() {
+    private Class<?>[] constructorArgsType() {
         return Collections2.transform(this.constructorArgs, new Function<ConstructorArg, Object>() {
             @Override
-            public Object apply(ConstructorArg input) {
-                return input.getType();
+            public Object apply(ConstructorArg arg) {
+                return arg.getType();
             }
         }).toArray(new Class<?>[0]);
-    }
-
-    public void constructorArg(ConstructorArg arg) {
-        this.constructorArgs.add(arg);
     }
 }

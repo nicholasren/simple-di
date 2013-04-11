@@ -47,7 +47,7 @@ public class Binding<T> {
     }
 
     public void constructorArg(ConstructorArg arg) {
-        ((WithConstructorArgTargetBuilder) this.targetBuilder).constructorArg(arg);
+        this.targetBuilder.constructorArg(arg);
     }
 
     public void property(String name, Object value) {
