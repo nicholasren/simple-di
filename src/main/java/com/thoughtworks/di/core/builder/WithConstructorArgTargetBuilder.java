@@ -1,7 +1,9 @@
-package com.thoughtworks.di.core;
+package com.thoughtworks.di.core.builder;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Collections2;
+import com.thoughtworks.di.core.ConstructorArg;
+import com.thoughtworks.di.core.builder.TargetBuilder;
 import com.thoughtworks.di.exception.BeanCreationException;
 
 import javax.annotation.Nullable;

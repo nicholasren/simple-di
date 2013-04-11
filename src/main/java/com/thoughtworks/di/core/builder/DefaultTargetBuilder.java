@@ -1,4 +1,4 @@
-package com.thoughtworks.di.core;
+package com.thoughtworks.di.core.builder;
 
 import com.thoughtworks.di.exception.BeanCreationException;
 

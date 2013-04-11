@@ -1,5 +1,6 @@
-package com.thoughtworks.di.core;
+package com.thoughtworks.di.core.injector;
 
+import com.thoughtworks.di.core.Injector;
 import com.thoughtworks.di.exception.BeanCreationException;
 
 import java.lang.reflect.Method;
