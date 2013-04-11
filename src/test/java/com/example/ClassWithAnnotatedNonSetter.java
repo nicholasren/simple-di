@@ -1,6 +1,7 @@
 package com.example;
 
-import javax.inject.Inject;
+
+import com.thoughtworks.di.annotation.Inject;
 
 public class ClassWithAnnotatedNonSetter {
 

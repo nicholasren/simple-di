@@ -27,15 +27,11 @@ project.ext {
     guavaVersion = '14.0.1'
     junitVersion = '4.10'
     hamcrestVersion = '1.3'
-    jsr305Version = '1.3.7'
-    injectVersion = '1'
 }
 
 dependencies {
     compile(
             "com.google.guava:guava:$guavaVersion",
-            "net.sourceforge.findbugs:jsr305:$jsr305Version",
-            "javax.inject:javax.inject:$injectVersion"
     )
 
     runtime(

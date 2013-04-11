@@ -28,7 +28,7 @@ public class Injector {
     public <T> T get(final String id, Class<T> type) {
         Collection<Binding> foundBindings = Collections2.filter(bindings, new Predicate<Binding>() {
             @Override
-            public boolean apply(@javax.annotation.Nullable Binding binding) {
+            public boolean apply(Binding binding) {
                 return binding.getId().equals(id);
             }
         });

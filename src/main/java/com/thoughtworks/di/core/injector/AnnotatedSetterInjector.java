@@ -1,5 +1,6 @@
 package com.thoughtworks.di.core.injector;
 
+import com.thoughtworks.di.annotation.Inject;
 import com.thoughtworks.di.core.Injector;
 import com.thoughtworks.di.exception.BeanCreationException;
 
@@ -16,13 +17,6 @@ public class AnnotatedSetterInjector<T> extends DependencyInjector<T> {
         extractAnnotatedSetters();
     }
 
-    private void extractAnnotatedSetters() {
-        for (Method method : type.getMethods()) {
-            if (method.isAnnotationPresent(javax.inject.Inject.class)) {
-                annotatedSetters.add(method);
-            }
-        }
-    }
 
     public void inject(T target, Injector injector) {
 
@@ -49,4 +43,13 @@ public class AnnotatedSetterInjector<T> extends DependencyInjector<T> {
         }
         return paramsTypes[0];
     }
+
+    private void extractAnnotatedSetters() {
+        for (Method method : type.getMethods()) {
+            if (method.isAnnotationPresent(Inject.class)) {
+                annotatedSetters.add(method);
+            }
+        }
+    }
+
 }

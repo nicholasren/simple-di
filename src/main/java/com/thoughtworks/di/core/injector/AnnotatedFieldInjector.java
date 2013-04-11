@@ -1,5 +1,6 @@
 package com.thoughtworks.di.core.injector;
 
+import com.thoughtworks.di.annotation.Inject;
 import com.thoughtworks.di.core.Injector;
 import com.thoughtworks.di.exception.BeanCreationException;
 
@@ -34,7 +35,7 @@ public class AnnotatedFieldInjector<T> extends DependencyInjector<T> {
 
     private void extractAnnotatedFields() {
         for (Field field : type.getDeclaredFields()) {
-            if (field.isAnnotationPresent(javax.inject.Inject.class)) {
+            if (field.isAnnotationPresent(Inject.class)) {
                 annotatedFields.add(field);
             }
         }

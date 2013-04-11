@@ -3,10 +3,8 @@ package com.thoughtworks.di.core.builder;
 import com.google.common.base.Function;
 import com.google.common.collect.Collections2;
 import com.thoughtworks.di.core.ConstructorArg;
-import com.thoughtworks.di.core.builder.TargetBuilder;
 import com.thoughtworks.di.exception.BeanCreationException;
 
-import javax.annotation.Nullable;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,9 +38,8 @@ public class WithConstructorArgTargetBuilder<T> implements TargetBuilder<T> {
 
     private Object[] getConstructorArgsValue() {
         return Collections2.transform(this.constructorArgs, new Function<ConstructorArg, Object>() {
-            @Nullable
             @Override
-            public Object apply(@Nullable ConstructorArg arg) {
+            public Object apply(ConstructorArg arg) {
                 return arg.getValue();
             }
         }).toArray(new Object[0]);
@@ -50,9 +47,8 @@ public class WithConstructorArgTargetBuilder<T> implements TargetBuilder<T> {
 
     private Class<?>[] getConstructorArgsType() {
         return Collections2.transform(this.constructorArgs, new Function<ConstructorArg, Object>() {
-            @Nullable
             @Override
-            public Object apply(@Nullable ConstructorArg input) {
+            public Object apply(ConstructorArg input) {
                 return input.getType();
             }
         }).toArray(new Class<?>[0]);
