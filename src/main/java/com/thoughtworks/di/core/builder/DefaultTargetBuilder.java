@@ -1,6 +1,7 @@
 package com.thoughtworks.di.core.builder;
 
 import com.thoughtworks.di.core.ConstructorArg;
+import com.thoughtworks.di.core.Injector;
 import com.thoughtworks.di.exception.BeanCreationException;
 
 public class DefaultTargetBuilder<T> implements TargetBuilder<T> {
@@ -11,7 +12,7 @@ public class DefaultTargetBuilder<T> implements TargetBuilder<T> {
         this.type = type;
     }
 
-    public T build() {
+    public T build(Injector injector) {
         try {
             return (T) this.type.newInstance();
         } catch (Exception e) {

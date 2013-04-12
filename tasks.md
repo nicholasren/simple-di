@@ -40,3 +40,5 @@
 7. bind a interface to provided implementation  ZXY
 
 8. support setter annotation injecting DONE
+
+9. support bind to a instance

@@ -1,7 +1,10 @@
 package com.thoughtworks.di.core;
 
 
+import com.thoughtworks.di.core.builder.DefaultTargetBuilder;
 import com.thoughtworks.di.core.builder.WithConstructorArgTargetBuilder;
+
+import java.lang.reflect.Constructor;
 
 public class BindingBuilder<T> {
     private Binding<T> binding;
@@ -47,15 +50,35 @@ public class BindingBuilder<T> {
     }
 
     public BindingBuilder<T> to(Class<T> type) {
+
+        if (!hasDefaultConstructor(type)) {
+            this.binding.setTargetBuilder(new WithConstructorArgTargetBuilder<T>(type));
+        }
+        else{
+            this.binding.setTargetBuilder(new DefaultTargetBuilder<T>(type));
+        }
+
         this.binding.setType(type);
         this.binding.makeInjectors(type);
         return this;
     }
 
-    public BindingBuilder<T> in(Lifecycle lifecycle){
-        return null;
+
+    public BindingBuilder<T> in(Lifecycle lifecycle) {
+        this.binding.setLifecycle(lifecycle);
+        return this;
     }
 
-    public void to(T instance) {
+    private boolean hasDefaultConstructor(Class<T> type) {
+        return getDefaultConstructor(type) != null;
+    }
+
+    private Constructor getDefaultConstructor(Class<T> type) {
+        Constructor defaultConstructor = null;
+        try {
+            defaultConstructor = type.getConstructor(new Class<?>[0]);
+        } catch (Exception e) {
+        }
+        return defaultConstructor;
     }
 }

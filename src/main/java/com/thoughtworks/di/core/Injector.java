@@ -17,7 +17,7 @@ public class Injector {
     private Injector parent = NULL;
 
     public static Injector create(Configuration configuration) {
-        return create(configuration, null);
+        return create(configuration, NULL);
     }
 
     public static Injector create(Configuration configuration, Injector parent) {
@@ -51,6 +51,7 @@ public class Injector {
             return (T) firstOf(typeMatched);
         }
 
+        System.out.println(parent);
         return parent.get(type);
     }
 

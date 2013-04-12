@@ -17,6 +17,8 @@ public class Binding<T> {
     private AnnotatedFieldInjector annotatedFieldInjector;
     private AnnotatedSetterInjector<T> annotatedSetterInjector;
     private Class<T> interfaceClass;
+    private Lifecycle lifecycle;
+    private T singleton;
 
     public Binding(Class<T> type) {
         this.type = type;
@@ -28,8 +30,22 @@ public class Binding<T> {
     }
 
     public T getTarget(Injector injector) {
+        T target;
 
-        T target = (T) this.targetBuilder.build();
+        if (lifecycle == Lifecycle.Singleton) {
+            if (singleton == null) {
+                singleton = buildTarget(injector);
+            }
+            target = singleton;
+        } else {
+            target = buildTarget(injector);
+        }
+        return target;
+    }
+
+    private T buildTarget(Injector injector) {
+        T target;
+        target = (T) this.targetBuilder.build(injector);
 
         if (null != propertyInjector) {
             this.propertyInjector.inject(target, injector);
@@ -42,7 +58,6 @@ public class Binding<T> {
         this.annotatedFieldInjector.inject(target, injector);
 
         this.annotatedSetterInjector.inject(target, injector);
-
         return target;
     }
 
@@ -77,7 +92,7 @@ public class Binding<T> {
         return type;
     }
 
-    public void setTargetBuilder(WithConstructorArgTargetBuilder<T> targetBuilder) {
+    public void setTargetBuilder(TargetBuilder<T> targetBuilder) {
         this.targetBuilder = targetBuilder;
     }
 
@@ -90,12 +105,15 @@ public class Binding<T> {
     }
 
     public void makeInjectors(Class<T> type) {
-        this.targetBuilder = new DefaultTargetBuilder(type);
         this.annotatedFieldInjector = new AnnotatedFieldInjector(type);
         this.annotatedSetterInjector = new AnnotatedSetterInjector<T>(type);
     }
 
     public Class<T> getInterfaceClass() {
         return interfaceClass;
+    }
+
+    public void setLifecycle(Lifecycle lifecycle) {
+        this.lifecycle = lifecycle;
     }
 }
