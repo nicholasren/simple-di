@@ -46,8 +46,16 @@ public class BindingBuilder<T> {
         return this;
     }
 
-    public void to(Class<T> type) {
+    public BindingBuilder<T> to(Class<T> type) {
         this.binding.setType(type);
         this.binding.makeInjectors(type);
+        return this;
+    }
+
+    public BindingBuilder<T> in(Lifecycle lifecycle){
+        return null;
+    }
+
+    public void to(T instance) {
     }
 }
