@@ -15,6 +15,7 @@ public class BindingBuilder<T> {
             this.binding.setInterfaceClass(type);
         } else {
             this.binding = new Binding<T>(type);
+            this.binding.setTargetBuilder(new DefaultTargetBuilder<T>(type));
             this.binding.makeInjectors(type);
         }
 
@@ -27,16 +28,6 @@ public class BindingBuilder<T> {
 
     public BindingBuilder<T> constructorArg(Class<?> type, Object value) {
         binding.constructorArg(new ConstructorArg(type, value));
-        return this;
-    }
-
-    public BindingBuilder<T> toId(String id) {
-        this.binding.setId(id);
-        return this;
-    }
-
-    public BindingBuilder<T> property(String name, Object value) {
-        this.binding.property(name, value);
         return this;
     }
 

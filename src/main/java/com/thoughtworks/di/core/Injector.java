@@ -4,7 +4,9 @@ package com.thoughtworks.di.core;
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
+import com.thoughtworks.di.annotation.Component;
 import com.thoughtworks.di.exception.BeanCreationException;
+import com.thoughtworks.di.utils.ClassUtil;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -42,13 +44,13 @@ public class Injector {
         Collection<Binding> bound = typeBound(type);
 
         if (!bound.isEmpty()) {
-            return (T) firstOf(bound);
+            return firstOf(bound);
         }
 
         Collection<Binding> typeMatched = typeMatchedBindings(type);
 
         if (!typeMatched.isEmpty()) {
-            return (T) firstOf(typeMatched);
+            return firstOf(typeMatched);
         }
 
         System.out.println(parent);
@@ -110,6 +112,23 @@ public class Injector {
     }
 
     private Injector() {
+    }
+
+    public static Injector create(String packageName) {
+        final Collection<Class> classes = ClassUtil.getClassInfos(packageName);
+
+        Configuration configuration = new Configuration() {
+            @Override
+            protected void configure() {
+                for (Class clazz : classes) {
+                    if (clazz.isAnnotationPresent(Component.class)) {
+                        create(clazz);
+                    }
+                }
+            }
+        };
+
+        return Injector.create(configuration);
     }
 
     private static class NullInjector extends Injector {

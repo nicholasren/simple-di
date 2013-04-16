@@ -2,7 +2,6 @@ package com.thoughtworks.di.core;
 
 import com.thoughtworks.di.core.builder.DefaultTargetBuilder;
 import com.thoughtworks.di.core.builder.TargetBuilder;
-import com.thoughtworks.di.core.builder.WithConstructorArgTargetBuilder;
 import com.thoughtworks.di.core.injector.AnnotatedFieldInjector;
 import com.thoughtworks.di.core.injector.AnnotatedSetterInjector;
 import com.thoughtworks.di.core.injector.DependentReferenceInjector;

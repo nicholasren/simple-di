@@ -8,21 +8,22 @@ apply plugin: 'java'
 sourceCompatibility = 1.6
 targetCompatibility = 1.6
 
-version = '0.0.1-SNAPSHOT'
+version = '0.0.2-SNAPSHOT'
 group = 'com.github.nicholasren'
 
 repositories {
     mavenCentral()
+    flatDir {
+        name "fileRepo"
+        dirs "/tmp/repo"
+    }
 }
 
 uploadArchives {
     repositories {
-        flatDir {
-            dirs 'repos'
-        }
+        add project.repositories.fileRepo
     }
 }
-
 project.ext {
     guavaVersion = '14.0.1'
     junitVersion = '4.10'
@@ -53,9 +54,4 @@ task sourcesJar(type: Jar) {
 artifacts {
     archives jar
     archives sourcesJar
-}
-
-signing {
-    required { gradle.taskGraph.hasTask("uploadArchives") }
-    sign configurations.archives
 }

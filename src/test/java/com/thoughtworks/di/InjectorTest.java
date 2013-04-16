@@ -43,21 +43,6 @@ public class InjectorTest {
         assertThat(consumer.service(), is(ServiceImplementation.class.getCanonicalName()));
     }
 
-//    @Test(expected = CyclicDependencyException.class)
-//    public void should_throw_exception_if_cyclic_dependency() {
-//
-//        injector = Injector.create(new Configuration() {
-//            @Override
-//            protected void configure() {
-//                bind(ServiceConsumer.class).to(ServiceConsumerImplementation.class);
-//                bind(Service.class).to(BadService.class);
-//            }
-//        });
-//
-//
-//        injector.get(ServiceConsumer.class);
-//    }
-
 
     @Test
     public void should_be_able_to_declare_service_lifecycle() {
@@ -128,5 +113,11 @@ public class InjectorTest {
             }
         });
         assertThat(injector.get(Service.class), nullValue());
+    }
+
+    @Test
+    public void should_load_annotated_component(){
+        injector = Injector.create("com.example");
+        assertThat(injector.get(AnnotatedServiceImpl.class), notNullValue());
     }
 }
