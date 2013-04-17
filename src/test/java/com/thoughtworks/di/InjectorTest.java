@@ -120,4 +120,10 @@ public class InjectorTest {
         injector = Injector.create("com.example");
         assertThat(injector.get(AnnotatedServiceImpl.class), notNullValue());
     }
+
+    @Test
+    public void should_not_load_instance_for_null_type(){
+        injector = Injector.create("com.example");
+        assertThat(injector.get(null), nullValue());
+    }
 }

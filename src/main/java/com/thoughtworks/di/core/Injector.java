@@ -98,7 +98,7 @@ public class Injector {
                 if (binding.getType() == null) {
                     throw new BeanCreationException("Can not create bean without supplying implementation class for " + binding.getInterfaceClass());
                 }
-                return binding.getInterfaceClass() == type;
+                return binding.getInterfaceClass() != null && binding.getInterfaceClass() == type;
             }
         };
 
