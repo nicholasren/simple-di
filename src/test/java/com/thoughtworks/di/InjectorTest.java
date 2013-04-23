@@ -132,10 +132,23 @@ public class InjectorTest {
         assertThat(service1, sameInstance(service2));
     }
 
+    @Test
+    public void should_load_annotated_component_from_parent_container(){
+        injector = Injector.create("com.example");
+    }
+
 
     @Test
     public void should_not_load_instance_for_null_type() {
-        injector = Injector.create("com.example");
-        assertThat(injector.get(null), nullValue());
+        Injector parent = Injector.create(new Configuration() {
+            @Override
+            protected void configure() {
+                bind(ServiceConsumer.class).to(SetterConsumer.class);
+            }
+        });
+
+
+        injector = Injector.create("com.example", parent);
+        assertThat(injector.get(ServiceConsumer.class), instanceOf(SetterConsumer.class));
     }
 }

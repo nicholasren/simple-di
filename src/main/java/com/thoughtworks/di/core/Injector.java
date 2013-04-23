@@ -27,6 +27,31 @@ public class Injector {
         return new Injector(buildBindings(configuration), parent);
     }
 
+    public static Injector create(String packageName) {
+
+        return Injector.create(packageName, null);
+    }
+
+    public static Injector create(String packageName, Injector parent) {
+        final Collection<Class> classes = ClassUtil.getClassInfos(packageName);
+
+        Configuration configuration = new Configuration() {
+            @Override
+            protected void configure() {
+                for (Class clazz : classes) {
+                    if (clazz.isAnnotationPresent(Component.class)) {
+                        Lifecycle lifecycle = ((Component) clazz.getAnnotation(Component.class)).lifecycle();
+                        create(clazz).in(lifecycle);
+                    }
+                }
+            }
+        };
+
+        return Injector.create(configuration, parent);
+
+    }
+
+
     public <T> T get(final String id, Class<T> type) {
         Collection<Binding> foundBindings = Collections2.filter(bindings, new Predicate<Binding>() {
             @Override
@@ -112,24 +137,6 @@ public class Injector {
     }
 
     private Injector() {
-    }
-
-    public static Injector create(String packageName) {
-        final Collection<Class> classes = ClassUtil.getClassInfos(packageName);
-
-        Configuration configuration = new Configuration() {
-            @Override
-            protected void configure() {
-                for (Class clazz : classes) {
-                    if (clazz.isAnnotationPresent(Component.class)) {
-                        Lifecycle lifecycle = ((Component)clazz.getAnnotation(Component.class)).lifecycle();
-                        create(clazz).in(lifecycle);
-                    }
-                }
-            }
-        };
-
-        return Injector.create(configuration);
     }
 
     private static class NullInjector extends Injector {
