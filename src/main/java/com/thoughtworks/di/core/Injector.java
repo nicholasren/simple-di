@@ -122,7 +122,8 @@ public class Injector {
             protected void configure() {
                 for (Class clazz : classes) {
                     if (clazz.isAnnotationPresent(Component.class)) {
-                        create(clazz);
+                        Lifecycle lifecycle = ((Component)clazz.getAnnotation(Component.class)).lifecycle();
+                        create(clazz).in(lifecycle);
                     }
                 }
             }

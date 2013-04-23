@@ -4,8 +4,6 @@ import com.example.*;
 import com.thoughtworks.di.core.Configuration;
 import com.thoughtworks.di.core.Injector;
 import com.thoughtworks.di.core.Lifecycle;
-import com.thoughtworks.di.exception.BeanCreationException;
-import com.thoughtworks.di.exception.CyclicDependencyException;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.*;
@@ -116,13 +114,27 @@ public class InjectorTest {
     }
 
     @Test
-    public void should_load_annotated_component(){
+    public void should_load_annotated_transient_component() {
         injector = Injector.create("com.example");
-        assertThat(injector.get(AnnotatedServiceImpl.class), notNullValue());
+
+        Service service1 = injector.get(AnnotatedTransientServiceImpl.class);
+        Service service2 = injector.get(AnnotatedTransientServiceImpl.class);
+
+        assertThat(service1, not(sameInstance(service2)));
     }
 
     @Test
-    public void should_not_load_instance_for_null_type(){
+    public void should_load_annotated_singleton_component() {
+        injector = Injector.create("com.example");
+        Service service1 = injector.get(SingletonAnnotatedServiceImpl.class);
+        Service service2 = injector.get(SingletonAnnotatedServiceImpl.class);
+
+        assertThat(service1, sameInstance(service2));
+    }
+
+
+    @Test
+    public void should_not_load_instance_for_null_type() {
         injector = Injector.create("com.example");
         assertThat(injector.get(null), nullValue());
     }
