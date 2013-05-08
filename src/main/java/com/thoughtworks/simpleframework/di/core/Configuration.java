@@ -1,4 +1,4 @@
-package com.thoughtworks.di.core;
+package com.thoughtworks.simpleframework.di.core;
 
 
 import java.util.LinkedList;

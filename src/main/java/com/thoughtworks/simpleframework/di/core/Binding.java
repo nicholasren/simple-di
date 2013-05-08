@@ -1,11 +1,10 @@
-package com.thoughtworks.di.core;
+package com.thoughtworks.simpleframework.di.core;
 
-import com.thoughtworks.di.core.builder.DefaultTargetBuilder;
-import com.thoughtworks.di.core.builder.TargetBuilder;
-import com.thoughtworks.di.core.injector.AnnotatedFieldInjector;
-import com.thoughtworks.di.core.injector.AnnotatedSetterInjector;
-import com.thoughtworks.di.core.injector.DependentReferenceInjector;
-import com.thoughtworks.di.core.injector.PropertyInjector;
+import com.thoughtworks.simpleframework.di.core.builder.TargetBuilder;
+import com.thoughtworks.simpleframework.di.core.injector.AnnotatedFieldInjector;
+import com.thoughtworks.simpleframework.di.core.injector.AnnotatedSetterInjector;
+import com.thoughtworks.simpleframework.di.core.injector.DependentReferenceInjector;
+import com.thoughtworks.simpleframework.di.core.injector.PropertyInjector;
 
 public class Binding<T> {
     private String id;

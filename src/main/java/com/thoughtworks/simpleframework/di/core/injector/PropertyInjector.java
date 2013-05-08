@@ -1,8 +1,7 @@
-package com.thoughtworks.di.core.injector;
+package com.thoughtworks.simpleframework.di.core.injector;
 
-import com.thoughtworks.di.core.Injector;
-import com.thoughtworks.di.core.injector.DependencyInjector;
-import com.thoughtworks.di.exception.BeanCreationException;
+import com.thoughtworks.simpleframework.di.core.Injector;
+import com.thoughtworks.simpleframework.di.exception.BeanCreationException;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;

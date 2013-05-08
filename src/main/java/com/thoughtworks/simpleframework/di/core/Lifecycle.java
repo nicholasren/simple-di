@@ -1,4 +1,4 @@
-package com.thoughtworks.di.core;
+package com.thoughtworks.simpleframework.di.core;
 
 public enum Lifecycle {
     Transient, Singleton

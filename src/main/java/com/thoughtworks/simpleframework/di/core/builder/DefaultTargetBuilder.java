@@ -1,8 +1,8 @@
-package com.thoughtworks.di.core.builder;
+package com.thoughtworks.simpleframework.di.core.builder;
 
-import com.thoughtworks.di.core.ConstructorArg;
-import com.thoughtworks.di.core.Injector;
-import com.thoughtworks.di.exception.BeanCreationException;
+import com.thoughtworks.simpleframework.di.core.ConstructorArg;
+import com.thoughtworks.simpleframework.di.core.Injector;
+import com.thoughtworks.simpleframework.di.exception.BeanCreationException;
 
 public class DefaultTargetBuilder<T> implements TargetBuilder<T> {
 

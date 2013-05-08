@@ -1,6 +1,6 @@
-package com.thoughtworks.di.annotation;
+package com.thoughtworks.simpleframework.di.annotation;
 
-import com.thoughtworks.di.core.Lifecycle;
+import com.thoughtworks.simpleframework.di.core.Lifecycle;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

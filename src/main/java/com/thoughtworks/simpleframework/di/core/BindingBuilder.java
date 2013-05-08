@@ -1,8 +1,8 @@
-package com.thoughtworks.di.core;
+package com.thoughtworks.simpleframework.di.core;
 
 
-import com.thoughtworks.di.core.builder.DefaultTargetBuilder;
-import com.thoughtworks.di.core.builder.WithConstructorArgTargetBuilder;
+import com.thoughtworks.simpleframework.di.core.builder.DefaultTargetBuilder;
+import com.thoughtworks.simpleframework.di.core.builder.WithConstructorArgTargetBuilder;
 
 import java.lang.reflect.Constructor;
 

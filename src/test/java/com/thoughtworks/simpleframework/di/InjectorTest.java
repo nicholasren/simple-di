@@ -1,9 +1,9 @@
-package com.thoughtworks.di;
+package com.thoughtworks.simpleframework.di;
 
 import com.example.*;
-import com.thoughtworks.di.core.Configuration;
-import com.thoughtworks.di.core.Injector;
-import com.thoughtworks.di.core.Lifecycle;
+import com.thoughtworks.simpleframework.di.core.Configuration;
+import com.thoughtworks.simpleframework.di.core.Injector;
+import com.thoughtworks.simpleframework.di.core.Lifecycle;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.*;

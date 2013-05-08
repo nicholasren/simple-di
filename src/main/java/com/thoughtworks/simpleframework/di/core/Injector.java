@@ -1,12 +1,12 @@
-package com.thoughtworks.di.core;
+package com.thoughtworks.simpleframework.di.core;
 
 
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
-import com.thoughtworks.di.annotation.Component;
-import com.thoughtworks.di.exception.BeanCreationException;
-import com.thoughtworks.di.utils.ClassUtil;
+import com.thoughtworks.simpleframework.di.annotation.Component;
+import com.thoughtworks.simpleframework.di.exception.BeanCreationException;
+import com.thoughtworks.simpleframework.util.Lang;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -33,7 +33,7 @@ public class Injector {
     }
 
     public static Injector create(String packageName, Injector parent) {
-        final Collection<Class> classes = ClassUtil.getClassInfos(packageName);
+        final Collection<Class> classes = Lang.getClassInfos(packageName);
 
         Configuration configuration = new Configuration() {
             @Override

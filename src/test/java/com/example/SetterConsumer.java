@@ -1,6 +1,6 @@
 package com.example;
 
-import com.thoughtworks.di.annotation.Inject;
+import com.thoughtworks.simpleframework.di.annotation.Inject;
 
 public class SetterConsumer implements ServiceConsumer {
     private Service service;

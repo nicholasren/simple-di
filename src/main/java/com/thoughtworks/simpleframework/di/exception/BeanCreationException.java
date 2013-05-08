@@ -1,4 +1,4 @@
-package com.thoughtworks.di.exception;
+package com.thoughtworks.simpleframework.di.exception;
 
 public class BeanCreationException extends RuntimeException {
     public BeanCreationException(Throwable e) {

@@ -1,6 +1,6 @@
-package com.thoughtworks.di.core.injector;
+package com.thoughtworks.simpleframework.di.core.injector;
 
-import com.thoughtworks.di.core.Injector;
+import com.thoughtworks.simpleframework.di.core.Injector;
 
 public abstract class DependencyInjector<T> {
 
