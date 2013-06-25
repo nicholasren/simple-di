@@ -4,10 +4,6 @@ apply plugin: 'maven'
 apply plugin: 'signing'
 apply plugin: 'java'
 
-//source compatibility
-sourceCompatibility = 1.6
-targetCompatibility = 1.6
-
 version = '0.0.6-SNAPSHOT'
 group = 'com.github.nicholasren'
 
@@ -43,6 +39,7 @@ dependencies {
             "junit:junit-dep:$junitVersion",
             "org.hamcrest:hamcrest-core:$hamcrestVersion",
             "org.hamcrest:hamcrest-library:$hamcrestVersion",
+            "org.apache.httpcomponents:httpclient:4.2.5"
     )
 }
 

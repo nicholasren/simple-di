@@ -42,8 +42,7 @@ public class Binding<T> {
     }
 
     private T buildTarget(Injector injector) {
-        T target;
-        target = (T) this.targetBuilder.build(injector);
+        T target = (T) this.targetBuilder.build(injector);
 
         if (null != propertyInjector) {
             this.propertyInjector.inject(target, injector);

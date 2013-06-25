@@ -48,7 +48,6 @@ public class Injector {
         };
 
         return Injector.create(configuration, parent);
-
     }
 
 
@@ -60,7 +59,7 @@ public class Injector {
             }
         });
 
-        return foundBindings.isEmpty() ? parent.get(id, type) : (T) firstOf(foundBindings);
+        return (T) (foundBindings.isEmpty() ? parent.get(id, type) : firstOf(foundBindings));
 
     }
 
@@ -77,8 +76,6 @@ public class Injector {
         if (!typeMatched.isEmpty()) {
             return firstOf(typeMatched);
         }
-
-        System.out.println(parent);
         return parent.get(type);
     }
 
